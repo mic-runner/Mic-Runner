@@ -1,6 +1,31 @@
 
 ## I asked perplexity where to get started and the response looked pretty good (:
 
+
+[VideoSDK PeerJS WebRTC](https://www.videosdk.live/developer-hub/media-server/peerjs-webrtc)
+### this is a guide for building a peer-to-peer audio streaming app using WebRTC and PeerJS.
+### we may need a "signaling" server to facililtate connections
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
+#
+#
+#
+### perplexity responses on the technology in general and PeerJS specifically
+#
 To develop a peer-to-peer web app for transmitting audio using a local area network (LAN), Bluetooth, or WebRTC, you'll need to understand several key concepts and technologies. Here's an overview of what you should learn:
 
 ## WebRTC
