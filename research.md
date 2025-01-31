@@ -4,7 +4,7 @@
 
 [VideoSDK PeerJS WebRTC](https://www.videosdk.live/developer-hub/media-server/peerjs-webrtc)
 ### this is a guide for building a peer-to-peer audio streaming app using WebRTC and PeerJS.
-### we may need a "signaling" server to facililtate connections
+### we may need a "signaling" server to facililtate connections, although since everyone will be in the same room, possibly not
 
 
 
