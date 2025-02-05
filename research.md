@@ -4,7 +4,7 @@
 [prototype repo](https://github.com/radmuffin/proto_micRunner)
 
 
-[serverless PeerJS example](https://github.com/lesmana/webrtc-without-signaling-server)
+[serverless webRTC example](https://github.com/lesmana/webrtc-without-signaling-server)
 
 [VideoSDK PeerJS WebRTC](https://www.videosdk.live/developer-hub/media-server/peerjs-webrtc)
 ### this is a guide for building a peer-to-peer audio streaming app using WebRTC and PeerJS.
