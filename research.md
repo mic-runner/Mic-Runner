@@ -1,5 +1,8 @@
 
-## I asked perplexity where to get started and the response looked pretty good (:
+## RESEARCHH
+
+[prototype repo](https://github.com/radmuffin/proto_micRunner)
+I have a lot more experience with github pages deployment now haha -Daniel
 
 
 [VideoSDK PeerJS WebRTC](https://www.videosdk.live/developer-hub/media-server/peerjs-webrtc)
