@@ -6,6 +6,8 @@
 
 [serverless webRTC example](https://github.com/lesmana/webrtc-without-signaling-server)
 
+LAN is going to be our friend here
+
 [VideoSDK PeerJS WebRTC](https://www.videosdk.live/developer-hub/media-server/peerjs-webrtc)
 ### this is a guide for building a peer-to-peer audio streaming app using WebRTC and PeerJS.
 ### we may need a "signaling" server to facililtate connections, although since everyone will be in the same room, possibly not
