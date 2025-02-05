@@ -9,6 +9,7 @@
 [another example](https://github.com/cjb/serverless-webrtc)
 
 LAN is going to be our friend here, silver bullet to make it serverless
+Free public STUN and TURN servers are needed probably
 #
 
 [VideoSDK PeerJS WebRTC](https://www.videosdk.live/developer-hub/media-server/peerjs-webrtc)
