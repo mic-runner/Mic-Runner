@@ -1,7 +1,12 @@
 :root {
-  margin: 0;
-  padding: 0;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* global variables */
+  --text: #F2E5E5;
+  --background: #080303;
+  --primary-color: #E68888;
+  --secondary-color: #911010;
+  --accent: #FB2323;
+  --font-family: 'Roboto', monospace;
+  /* global variables */
 }
 
 

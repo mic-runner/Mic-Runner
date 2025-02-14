@@ -4,15 +4,18 @@ import {BrowserRouter,
     Routes,
 } from "react-router-dom"
 
-import participant from "./pages/participant.tsx";
-import presenter from "./pages/presenter.tsx";
-import ErrorPage from "./pages/ErrorPage.tsx";
+import participant from "./pages/participant/participant.tsx";
+import presenter from "./pages/presenter/presenter.tsx";
+import ErrorPage from "./pages/errorPage/ErrorPage.tsx";
 
 import {useDevice, DeviceType} from "./components/device/useDevice.ts";
 
 // Consider checking connection to Wi-Fi using navigator.connection
 
 function App() {
+
+    // I added this so I can work on the mobile version on my laptop. set this to true if you want actual functionality and false if you're working on mobile
+    const isMobileOverride = false;
 
     // presenterRoutes if we want to do logic with getting the device type (mobile vs desktop)
     const presenterRoutes = () => {
@@ -28,7 +31,8 @@ function App() {
     const participantRoutes = () => {
         return (
             <Routes>
-                <Route index element={participant()} />
+                {/* I hardcoded a Username here that will need to be typed in by the user eventually on the landing page */}
+                <Route index element={participant("Username123")} /> 
                 <Route path='*' element={ErrorPage()} />
             </Routes>
         )
@@ -37,7 +41,7 @@ function App() {
     return (
       <BrowserRouter>
           {
-            (useDevice() == DeviceType.web) ? (presenterRoutes()) : (participantRoutes())
+            (isMobileOverride && useDevice() == DeviceType.web) ? (presenterRoutes()) : (participantRoutes())
           }
       </BrowserRouter>
     )
