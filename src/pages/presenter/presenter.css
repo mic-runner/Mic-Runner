@@ -1,0 +1,122 @@
+#presenter-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100vh;
+    background-color: var(--background);
+    color: #fff;
+  }
+  
+
+  #left-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px;
+    border-right: 1px solid var(--secondary-color);
+  }
+  
+  #qr-info {
+    text-align: center;
+  }
+  
+  #title {
+    font-size: 3em;
+    font-weight: bold;
+  }
+  
+  #room-id {
+    font-size: 1.5em;
+  }
+  
+  #qr-code img {
+    width: 200px;
+    height: auto;
+  }
+  
+  #join-text {
+    margin-top: 10px;
+  }
+  
+  #room-link {
+    color: var(--secondary-color); 
+    text-decoration: none;
+  }
+  
+  #room-link:hover {
+    text-decoration: underline;
+  }
+  
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--secondary-color);
+    margin: 20px 0;
+  }
+  
+  
+  #next-up h2 {
+    font-size: 1.8em;
+  }
+  
+  #next-up ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  #next-up li {
+    margin-bottom: 15px;
+  }
+  
+  #next-up li strong {
+    display: block;
+  }
+  
+  #next-up li p {
+    margin-left: 10px; 
+  }
+  
+  
+  #right-section {
+    padding: 30px;
+  }
+  
+  #participant-comment {
+    font-size: 1.5em;
+  }
+  
+  #current-speaker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #microphone-icon {
+    font-size: 6em;
+  }
+  
+  #speaker-username {
+    font-size: 2em;
+  }
+  
+  #speaker-status {
+    color: var(--secondary-color);
+  }
+  
+
+  #controls {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .control-button {
+    background-color: transparent;
+    color: #fff;
+    border: solid thin var(--secondary-color);
+    padding: 10px;
+    margin-left: 10px;
+  }
+  
+  .control-button:hover {
+    background-color: var(--secondary-color);
+  }
+  
