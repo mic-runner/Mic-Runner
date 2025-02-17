@@ -120,3 +120,6 @@
     background-color: var(--secondary-color);
   }
   
+  h1{
+    text-align: unset;
+  }

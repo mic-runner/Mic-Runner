@@ -32,7 +32,7 @@ function App() {
         return (
             <Routes>
                 {/* I hardcoded a Username here that will need to be typed in by the user eventually on the landing page */}
-                <Route index element={participant("Username123")} /> 
+                <Route index element={participant({username: "Username123", placeInLine: '1'})} /> 
                 <Route path='*' element={ErrorPage()} />
             </Routes>
         )

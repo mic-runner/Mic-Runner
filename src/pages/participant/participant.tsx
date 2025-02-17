@@ -1,30 +1,44 @@
+import { useState } from "react";
 import TextSubmission from "./textSubmission/TextSubmission";
 import PressToSpeak from "./pressToSpeak/PressToSpeak";
 import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
 
-function participantPage(username: string) {
+interface participantProps {
+  username: string,
+  placeInLine: string, // this is a string number representing the place this person is in line.
+}
+
+function ParticipantPage(props: participantProps) {
+  // to see other components, switch 'textSubmission' to either: 'waitingInLine' or 'pressToSpeak' and reload the page.
+  const [currentComponent, setCurrentComponent] = useState("textSubmission");
+
   return (
-    <div id="participant-layout" >
-    <div id="participant-header">
-    <h1 id="participant-title">Mic Runner</h1>
-    <h2 id="participant-username">{username}</h2>
-    </div>
+    <div id="participant-layout">
+      <div id="participant-header">
+        <h1 id="participant-title">Mic Runner</h1>
+        <h2 id="participant-username">{props.username}</h2>
+      </div>
 
-    <div id="participant-center">
-    {/* <TextSubmission textboxPlaceholder="I have a question about..." buttonPlaceholder="Get in line" textSubmissionHeader="Comment Topic"/> */}
-    <WaitingInLine placeInLine="5"/>
-    {/* <PressToSpeak /> */}
-    </div>
+      <div id="participant-center">
+        {currentComponent === "textSubmission" && (
+          <TextSubmission
+            textboxPlaceholder="I have a question about..."
+            buttonPlaceholder="Get in line"
+            textSubmissionHeader="Comment Topic"
+          />
+        )}
+        {currentComponent === "waitingInLine" && (
+          <WaitingInLine placeInLine={props.placeInLine}  />
+        )}
+        {currentComponent === "pressToSpeak" && <PressToSpeak />}
+      </div>
 
-    <div id="participant-footer">
-    <h3 id="participant-room">
-      Room123
-    </h3>
+      <div id="participant-footer">
+        <h3 id="participant-room">Room123</h3>
+      </div>
     </div>
-
-  </div>
   );
 }
 
-export default participantPage;
+export default ParticipantPage;

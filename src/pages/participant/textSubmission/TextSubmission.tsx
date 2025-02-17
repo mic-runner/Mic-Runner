@@ -12,7 +12,7 @@ const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Submitted: ${text}`);
+    alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
     setText("");
   };
 
