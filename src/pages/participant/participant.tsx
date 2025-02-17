@@ -1,3 +1,6 @@
+import TextSubmission from "./textSubmission/TextSubmission";
+import PressToSpeak from "./pressToSpeak/PressToSpeak";
+import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
 
 function participantPage(username: string) {
@@ -9,7 +12,9 @@ function participantPage(username: string) {
     </div>
 
     <div id="participant-center">
-      Center Components here
+    {/* <TextSubmission textboxPlaceholder="I have a question about..." buttonPlaceholder="Get in line" textSubmissionHeader="Comment Topic"/> */}
+    <WaitingInLine placeInLine="5"/>
+    {/* <PressToSpeak /> */}
     </div>
 
     <div id="participant-footer">

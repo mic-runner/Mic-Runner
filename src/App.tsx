@@ -15,7 +15,7 @@ import {useDevice, DeviceType} from "./components/device/useDevice.ts";
 function App() {
 
     // I added this so I can work on the mobile version on my laptop. set this to true if you want actual functionality and false if you're working on mobile
-    const isMobileOverride = true;
+    const isMobileOverride = false;
 
     // presenterRoutes if we want to do logic with getting the device type (mobile vs desktop)
     const presenterRoutes = () => {
