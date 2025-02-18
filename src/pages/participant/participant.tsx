@@ -5,8 +5,9 @@ import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
 
 interface participantProps {
-  username: string,
-  placeInLine: string, // this is a string number representing the place this person is in line.
+  username: string;
+  placeInLine: string; // this is a string number representing the place this person is in line.
+  roomNumber: string;
 }
 
 function ParticipantPage(props: participantProps) {
@@ -29,13 +30,13 @@ function ParticipantPage(props: participantProps) {
           />
         )}
         {currentComponent === "waitingInLine" && (
-          <WaitingInLine placeInLine={props.placeInLine}  />
+          <WaitingInLine placeInLine={props.placeInLine} />
         )}
         {currentComponent === "pressToSpeak" && <PressToSpeak />}
       </div>
 
       <div id="participant-footer">
-        <h3 id="participant-room">Room123</h3>
+        <h3 id="participant-room">Room123{/*props.roomNumber*/}</h3>
       </div>
     </div>
   );
