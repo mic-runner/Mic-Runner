@@ -5,13 +5,13 @@ import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
 
 interface participantProps {
-  username: string,
-  placeInLine: string, // this is a string number representing the place this person is in line.
+  username: string;
+  placeInLine: string; // this is a string number representing the place this person is in line.
 }
 
 function ParticipantPage(props: participantProps) {
   // to see other components, switch 'textSubmission' to either: 'waitingInLine' or 'pressToSpeak' and reload the page.
-  const [currentComponent, setCurrentComponent] = useState("textSubmission");
+  const [currentComponent] = useState("pressToSpeak");
 
   return (
     <div id="participant-layout">
@@ -28,9 +28,7 @@ function ParticipantPage(props: participantProps) {
             textSubmissionHeader="Comment Topic"
           />
         )}
-        {currentComponent === "waitingInLine" && (
-          <WaitingInLine placeInLine={props.placeInLine}  />
-        )}
+        {currentComponent === "waitingInLine" && <WaitingInLine placeInLine={props.placeInLine} />}
         {currentComponent === "pressToSpeak" && <PressToSpeak />}
       </div>
 
