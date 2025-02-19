@@ -7,12 +7,11 @@ interface UserContextType {
   setRoomNumber: React.Dispatch<React.SetStateAction<string>>;
 }
 
-// Create the context with an initial empty object
+// creating context here
 export const UserContext = createContext<UserContextType | undefined>(
   undefined
 );
 
-// Define props type for UserProvider
 interface UserProviderProps {
   children: React.ReactNode;
 }
