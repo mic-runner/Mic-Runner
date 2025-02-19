@@ -12,7 +12,7 @@ interface participantProps {
 
 function ParticipantPage(props: participantProps) {
   // to see other components, switch 'textSubmission' to either: 'waitingInLine' or 'pressToSpeak' and reload the page.
-  const [currentComponent, setCurrentComponent] = useState("textSubmission");
+  const [currentComponent] = useState("pressToSpeak");
 
   return (
     <div id="participant-layout">
