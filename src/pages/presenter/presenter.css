@@ -1,125 +1,87 @@
-#presenter-layout {
+  * {
+    box-sizing: border-box;
+
+    color: white;
+    background: black;
+
+    /* For Development to see how things look */
+    /* border: 1px solid red; */
+  }
+
+  .presenter-layout {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 2.5%;
+    padding-top: 2%;
+  }
+
+  .inner-presenter-layout
+  {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+  }
+  
+  .presenter-header {
+    width: 100%;
+    text-align: left;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    justify-content: flex-end;
+
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .presenter-title {
+    margin-top: 0%;
+    margin-bottom: 0%;
+    color: var(--text);
+  }
+
+  .room-number {
+    margin-top: 0.35%;
+    margin-bottom: 0.85%;
+    color: var(--primary-color);
+  }
+
+  .presenter-content {
+    width: 100%;
+
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 100vh;
-    background-color: var(--background);
-    color: #fff;
+    flex-grow: 1;
   }
   
-
-  #left-section {
+  .left-column {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 30px;
-    border-right: 1px solid var(--secondary-color);
+    border-right: 1px solid var(--accent);
   }
   
-  #qr-info {
+  .top-box {
+    padding: 1.25em;
     text-align: center;
+    flex: 1;
+    border-bottom: 1px solid var(--accent);
   }
   
-  #title {
-    font-size: 3em;
-    font-weight: bold;
+  .bottom-box {
+    padding: 1.25em;
+    text-align: center;
+    flex: 1;
   }
   
-  #room-id {
-    font-size: 1.5em;
-  }
-  
-  #qr-code img {
-    width: 200px;
-    height: auto;
-  }
-  
-  #join-text {
-    margin-top: 10px;
-  }
-  
-  #room-link {
-    color: var(--secondary-color); 
-    text-decoration: none;
-  }
-  
-  #room-link:hover {
-    text-decoration: underline;
-  }
-  
-
-  .divider {
-    border: none;
-    border-top: 1px solid var(--secondary-color);
-    margin: 20px 0;
-  }
-  
-  
-  #next-up h2 {
-    font-size: 1.8em;
-  }
-  
-  #next-up ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  
-  #next-up li {
-    margin-bottom: 15px;
-  }
-  
-  #next-up li strong {
-    display: block;
-  }
-  
-  #next-up li p {
-    margin-left: 10px; 
-  }
-  
-  
-  #right-section {
-    padding: 30px;
-  }
-  
-  #participant-comment {
-    font-size: 1.5em;
-  }
-  
-  #current-speaker {
+  .right-column {
+    padding: 1.25em;
+    text-align: center;
     display: flex;
-    flex-direction: column;
     align-items: center;
-  }
-  
-  #microphone-icon {
-    font-size: 6em;
-  }
-  
-  #speaker-username {
-    font-size: 2em;
-  }
-  
-  #speaker-status {
-    color: var(--secondary-color);
-  }
-  
-
-  #controls {
-    display: flex;
     justify-content: center;
-  }
-  
-  .control-button {
-    background-color: transparent;
-    color: #fff;
-    border: solid thin var(--secondary-color);
-    padding: 10px;
-    margin-left: 10px;
-  }
-  
-  .control-button:hover {
-    background-color: var(--secondary-color);
-  }
-  
-  h1{
-    text-align: unset;
   }
