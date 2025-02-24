@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main # Change if your deployment branch is different
 
 permissions:
   contents: read
@@ -17,13 +17,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: src
+          path: dist
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
