@@ -16,7 +16,7 @@ function HostRoom() {
   };
 
   return (
-    <button className="host-room-button" onClick={handleHostRoom}>
+    <button className="host-room-button styled-button" onClick={handleHostRoom}>
       Host a room
     </button>
   );

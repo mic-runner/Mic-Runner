@@ -1,16 +1,5 @@
 .host-room-button {
-  display: flex;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--text);
-  background-color: var(--background);
-  border-width: 1px;
-  border-color: white;
-  border-radius: 6px;
   margin: 10vh 0 3vh 10vw;
-  cursor: pointer;
-  transition: background 0.3s ease;
 }
 
 .host-room-button:hover {

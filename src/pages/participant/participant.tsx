@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../components/UserContext";
 import TextSubmission from "./textSubmission/TextSubmission";
 import PressToSpeak from "./pressToSpeak/PressToSpeak";
@@ -14,6 +15,7 @@ function ParticipantPage() {
 
   const { username, roomNumber, placeInLine, setPlaceInLine } = userContext; 
   const [currentComponent, setCurrentComponent] = useState("textSubmission");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   //////////DELETE LATER!! THIS IS JUST TO SIMULATE WAITING IN LINE///////////////////// 
 
@@ -36,6 +38,14 @@ function ParticipantPage() {
   if (Number(placeInLine) === 0 && currentComponent === "waitingInLine") {
     setCurrentComponent("pressToSpeak");
   }
+
+  const handleBack = () => {
+    if (currentComponent === "textSubmission") {
+      navigate("/"); 
+    } else if (currentComponent === "waitingInLine" || currentComponent === "pressToSpeak") {
+      setCurrentComponent("textSubmission");
+    } 
+  };
 
   return (
     <div id="participant-layout">
@@ -61,7 +71,9 @@ function ParticipantPage() {
 
       <div id="participant-footer">
         <h3 id="participant-room">Room {roomNumber}</h3>
-        {/* <button>Back</button> */}
+        <button onClick={handleBack} className="back-button styled-button">
+        {currentComponent === "textSubmission" ? "Back" : "Leave Line"}
+      </button>
       </div>
     </div>
   );
