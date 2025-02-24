@@ -5,6 +5,7 @@ interface TextSubmissionProps {
   textboxPlaceholder: string;
   buttonPlaceholder: string;
   textSubmissionHeader: string;
+  onSubmitText: () => void;
 }
 
 const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
@@ -14,12 +15,13 @@ const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
     e.preventDefault();
     alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
     setText("");
+    props.onSubmitText(); 
   };
 
   return (
     <form className="text-form" onSubmit={handleSubmitText}>
-        <h3 id="text-submission-header" >{props.textSubmissionHeader}</h3>
-        <textarea
+      <h3 id="text-submission-header">{props.textSubmissionHeader}</h3>
+      <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
         className="text-input"
