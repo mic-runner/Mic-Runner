@@ -16,18 +16,20 @@ const PresenterPage = () => {
   useEffect(() => {
     setParticipants(DataService.getParticipants());
 
-    if (!state.room) {
+    if (state) {
+        // Keeping the roomInfo object for centralization of updates
+        const room: RoomInfo = {
+            roomNumber: state.room,
+            joinUrl: `${window.location.origin}/participant?room=${state.room}`,
+        };
+
+        setRoomInfo(room);
+    }
+    else {
         // If the host has no room number navigate to the landing page
         navigate("/");
+        // We could alternatively generate a room number here
     }
-
-    // Keeping the roomInfo object for centralization of updates
-    const room: RoomInfo = {
-          roomNumber: state.room,
-          joinUrl: `${window.location.origin}/participant?room=${state.room}`,
-    };
-
-    setRoomInfo(room);
 
   }, []);
 
