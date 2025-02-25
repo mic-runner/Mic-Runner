@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import { UserContext } from "../../components/UserContext";
 import TextSubmission from "./textSubmission/TextSubmission";
 import PressToSpeak from "./pressToSpeak/PressToSpeak";
@@ -13,9 +13,32 @@ function ParticipantPage() {
     throw new Error("ParticipantPage must be used within a UserProvider");
   }
 
-  const { username, roomNumber, placeInLine, setPlaceInLine } = userContext; 
+  const { username, roomNumber, placeInLine, setPlaceInLine, setRoomNumber } = userContext;
   const [currentComponent, setCurrentComponent] = useState("textSubmission");
   const navigate = useNavigate(); // Initialize useNavigate
+  const [params]= useSearchParams();
+
+  useEffect(() => {
+    // The format of a url with a room value is https://micrunner.click/participant?room=#
+    if (params.get("room")) {
+      setRoomNumber(params.get("room") as string);
+      console.log(`Room number set ${roomNumber}`)
+    }
+    //Normal application behavior
+    else {
+      console.log("No url params")
+
+      // If there is no room number navigate back to launch page
+      console.log(`Room number ${roomNumber}`);
+      if (!roomNumber) {
+        console.log("No room number")
+        navigate("/");
+      }
+    }
+  }, [])
+
+
+
 
   //////////DELETE LATER!! THIS IS JUST TO SIMULATE WAITING IN LINE///////////////////// 
 
