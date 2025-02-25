@@ -1,0 +1,81 @@
+.current-participant-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+
+.current-speaker-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  border: 1px solid rgba(242, 229, 229, 0.2);
+  border-radius: 4px;
+  gap: 1em;
+  width: 100%;
+  max-width: 500px;
+}
+
+.microphone-icon {
+  margin-bottom: 1.5em;
+}
+
+.microphone-icon svg {
+  width: 100px;
+  height: 100px;
+}
+
+.speaker-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2em;
+}
+
+.speaker-name {
+  font-size: 1.5rem;
+  margin-bottom: 0.5em;
+}
+
+.speaker-status {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+}
+
+.participant-comment-section {
+  text-align: left;
+  font-size: 0.9rem;
+  margin-bottom: 1em;
+}
+
+.speaker-controls {
+  display: flex;
+  gap: 1em;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1.5em;
+}
+
+.control-button {
+  padding: 0.5em 1em;
+  background: transparent;
+  border: 1px solid var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+  font-family: var(--font-family);
+}
+
+.control-button:hover {
+  background: rgba(242, 229, 229, 0.1);
+}
+
+.mute-button {
+  border-color: var(--primary-color);
+}
+
+.next-button {
+  border-color: var(--text);
+}

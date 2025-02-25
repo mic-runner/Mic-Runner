@@ -1,264 +1,94 @@
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    color: var(--text);
-    font-family: var(--font-family);
-  }
-  
-  body {
-    background-color: var(--background);
-  }
-  
-  .presenter-layout {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 2.5%;
-    padding-top: 2%;
-    background-color: var(--background);
-  }
-  
-  .inner-presenter-layout {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-  }
-  
-  .presenter-header {
-    width: 100%;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; 
-    justify-content: flex-end;
-    border-bottom: 1.5px solid var(--accent);
-  }
-  
-  .presenter-title {
-    margin-top: 0%;
-    margin-bottom: 0%;
-    color: var(--text);
-    text-transform: uppercase;
-    font-size: 1.8rem;
-    letter-spacing: 0.1rem;
-  }
-  
-  .room-number {
-    margin-top: 0.35%;
-    margin-bottom: 0.85%;
-    color: var(--primary-color);
-    font-size: 1rem;
-  }
-  
-  .presenter-content {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    flex-grow: 1;
-  }
-  
-  .left-column {
-    display: flex;
-    flex-direction: column;
-    border-right: 1.5px solid var(--accent);
-  }
-  
-  .top-box {
-    padding: 1.25em;
-    text-align: center;
-    flex: 1;
-    border-bottom: 1.5px solid var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .top-box-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 400px;
-  }
-  
-  .join-box {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    margin-bottom: 0.75em;
-  }
-  
-  .qr-code {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 1em;
-  }
-  
-  .qr-placeholder {
-    width: 150px;
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    border: 2px solid var(--text);
-    font-size: 0.8rem;
-    line-height: 1.2;
-    padding: 0.5em;
-  }
-  
-  .join-now {
-    flex: 1;
-    font-size: 2rem;
-    text-align: left;
-    line-height: 1.2;
-  }
-  
-  .link-box {
-    color: var(--primary-color);
-    width: 100%;
-    text-align: center;
-    font-size: 1.2rem;
-  }
-  
-  .bottom-box {
-    padding: 1.25em;
-    flex: 1;
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .next-up-section {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .section-title {
-    font-size: 1.2rem;
-    margin-bottom: 1em;
-  }
-  
-  .participants-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    overflow-y: auto;
-    max-height: calc(100% - 3em);
-    /* Scrollbar styling */
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) rgba(242, 229, 229, 0.1);
-  }
-  
-  /* Webkit scrollbar styling */
-  .participants-list::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .participants-list::-webkit-scrollbar-track {
-    background: rgba(242, 229, 229, 0.1);
-    border-radius: 3px;
-  }
-  
-  .participants-list::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
-    border-radius: 3px;
-  }
-  
-  .participant-item {
-    padding: 0.5em 0;
-    border-bottom: 1px solid rgba(242, 229, 229, 0.1);
-  }
-  
-  .participant-name {
-    color: var(--primary-color);
-    margin-bottom: 0.25em;
-  }
-  
-  .participant-comment {
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
-  
-  .right-column {
-    padding: 1.25em;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .participant-comment-section {
-    text-align: left;
-    margin-bottom: 2em;
-    font-size: 0.9rem;
-  }
-  
-  .current-speaker-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2em;
-    border: 1px solid rgba(242, 229, 229, 0.2);
-    border-radius: 4px;
-    gap: 1em;
-  }
-  
-  .microphone-icon {
-    margin-bottom: 1em;
-  }
-  
-  .speaker-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2em;
-  }
-  
-  .speaker-name {
-    font-size: 1.5rem;
-    margin-bottom: 0.5em;
-  }
-  
-  .speaker-status {
-    font-size: 0.9rem;
-    color: var(--primary-color);
-  }
-  
-  .speaker-controls {
-    display: flex;
-    gap: 1em;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .control-button {
-    padding: 0.5em 1em;
-    background: transparent;
-    border: 1px solid var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-    min-width: 120px;
-    font-family: var(--font-family);
-  }
-  
-  .control-button:hover {
-    background: rgba(242, 229, 229, 0.1);
-  }
-  
-  .mute-button {
-    border-color: var(--primary-color);
-  }
-  
-  .next-button {
-    border-color: var(--text);
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: var(--text);
+  font-family: var(--font-family);
+}
+
+body {
+  background-color: var(--background);
+}
+
+.presenter-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.5%;
+  padding-top: 2%;
+  background-color: var(--background);
+}
+
+.inner-presenter-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.presenter-header {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  justify-content: flex-end;
+  border-bottom: 1.5px solid var(--accent);
+}
+
+.presenter-title {
+  margin-top: 0%;
+  margin-bottom: 0%;
+  color: var(--text);
+  text-transform: uppercase;
+  font-size: 1.8rem;
+  letter-spacing: 0.1rem;
+}
+
+.room-number {
+  margin-top: 0.35%;
+  margin-bottom: 0.85%;
+  color: var(--primary-color);
+  font-size: 1rem;
+}
+
+.presenter-content {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-grow: 1;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  border-right: 1.5px solid var(--accent);
+}
+
+.top-box {
+  padding: 1.25em;
+  text-align: center;
+  flex: 1;
+  border-bottom: 1.5px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-box {
+  padding: 1.25em;
+  flex: 1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.right-column {
+  padding: 1.25em;
+  display: flex;
+  flex-direction: column;
+}

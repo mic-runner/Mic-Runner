@@ -2,11 +2,11 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Participant from "./pages/participant/participant.tsx";
-import Presenter from "./pages/presenter/presenter.tsx";
 import ErrorPage from "./pages/errorPage/ErrorPage.tsx";
 import WelcomePage from "./pages/participant/welcomePage/WelcomePage.tsx";
 
 import { UserProvider } from "./components/UserContext.tsx";
+import Presenter from "./pages/presenter/presenterPage/presenterPage.tsx";
 
 function App() {
 
