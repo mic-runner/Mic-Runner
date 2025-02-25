@@ -4,15 +4,31 @@ import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
 import CurrentParticipant from "../currentParticipant/currentParticipant";
 import DataService, { Participant, RoomInfo } from "../../../services/dataService";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const PresenterPage = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [currentParticipant, setCurrentParticipant] = useState<Participant | null>(null);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
+  const { state } = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setParticipants(DataService.getParticipants());
-    setRoomInfo(DataService.getRoomInfo());
+
+    if (!state.room) {
+        // If the host has no room number navigate to the landing page
+        navigate("/");
+    }
+
+    // Keeping the roomInfo object for centralization of updates
+    const room: RoomInfo = {
+          roomNumber: state.room,
+          joinUrl: `${window.location.origin}/participant?room=${state.room}`,
+    };
+
+    setRoomInfo(room);
+
   }, []);
 
   const nextParticipant = () => {

@@ -11,8 +11,9 @@ function HostRoom() {
 
   const handleHostRoom = () => {
     const roomNumber = generateRandomRoomNumber();
+    // TODO: Don't use alerts in prod because they're blocking
     alert(`Creating a host room...\n\nYour room number is ${roomNumber}`);
-    navigate("/presenter");
+    navigate("/presenter", { state: { room: roomNumber } });
   };
 
   return (
