@@ -19,12 +19,15 @@ function ParticipantPage() {
   const [params]= useSearchParams();
 
   useEffect(() => {
+    // The format of a url with a room value is https://micrunner.click/participant?room=#
     if (params.get("room")) {
       setRoomNumber(params.get("room") as string);
       console.log(`Room number set ${roomNumber}`)
     }
+    //Normal application behavior
     else {
       console.log("No url params")
+
       // If there is no room number navigate back to launch page
       console.log(`Room number ${roomNumber}`);
       if (!roomNumber) {
