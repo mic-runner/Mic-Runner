@@ -67,7 +67,7 @@ const PresenterPage = () => {
         <div className="presenter-content">
             <div className="left-column">
                 <div className="top-box">
-                  <QRCodeSection joinUrl={roomInfo?.joinUrl} />
+                    {roomInfo ? (<QRCodeSection joinUrl={(roomInfo as RoomInfo).joinUrl} />) : (<div className="qr-placeholder">QR CODE PLACEHOLDER</div>) }
                 </div>
 
                 <div className="bottom-box">
