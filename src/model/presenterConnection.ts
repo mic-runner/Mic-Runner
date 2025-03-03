@@ -46,7 +46,7 @@ export class PresenterConnection extends Connection {
     });
   }
 
-  private sendLinePositions() {
+  sendLinePositions() {
     this.connectionQueue.forEach((conn, place) => {
       conn.send({
         type: "linePos",
