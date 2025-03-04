@@ -3,8 +3,8 @@ import { ParticipantConnection } from "../model/participantConnection";
 class ParticipantService {
   private conn: ParticipantConnection | null = null;
 
-  public connectParticipant(userId: string, roomId: string, changeLinePos: (i: number) => void) {
-    this.conn = new ParticipantConnection(userId, roomId, changeLinePos);
+  public connectParticipant(roomId: string, changeLinePos: (i: number) => void) {
+    this.conn = new ParticipantConnection(roomId, changeLinePos);
   }
 
   public sendComment(comment: string) {
@@ -15,4 +15,4 @@ class ParticipantService {
   }
 }
 
-export default new ParticipantService();
+export default ParticipantService;

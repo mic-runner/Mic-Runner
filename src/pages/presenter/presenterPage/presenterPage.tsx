@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import "./presenterPage.css";
 import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
 import CurrentParticipant from "../currentParticipant/currentParticipant";
 import DataService, { Participant, RoomInfo } from "../../../services/dataService";
 import {useLocation, useNavigate} from "react-router-dom";
+import PresenterService from "../../../services/presenter.ts";
 
 const PresenterPage = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [currentParticipant, setCurrentParticipant] = useState<Participant | null>(null);
+  const [presenterService] = useState<PresenterService>(new PresenterService());
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const { state } = useLocation();
   const navigate = useNavigate();
+  // const initialized = useRef(false)
 
   useEffect(() => {
     setParticipants(DataService.getParticipants());
@@ -24,6 +27,7 @@ const PresenterPage = () => {
         };
 
         setRoomInfo(room);
+        presenterService.connectPresenter(room.roomNumber);
     }
     else {
         // If the host has no room number navigate to the landing page

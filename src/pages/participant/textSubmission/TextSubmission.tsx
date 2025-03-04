@@ -5,7 +5,7 @@ interface TextSubmissionProps {
   textboxPlaceholder: string;
   buttonPlaceholder: string;
   textSubmissionHeader: string;
-  onSubmitText: () => void;
+  onSubmitText: (text: string) => void;
 }
 
 const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
@@ -13,9 +13,9 @@ const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
+    // alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
+    props.onSubmitText(text);
     setText("");
-    props.onSubmitText(); 
   };
 
   return (

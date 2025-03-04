@@ -5,6 +5,7 @@ import TextSubmission from "./textSubmission/TextSubmission";
 import PressToSpeak from "./pressToSpeak/PressToSpeak";
 import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
+import ParticipantService from "../../services/participant.ts";
 
 function ParticipantPage() {
   const userContext = useContext(UserContext);
@@ -17,6 +18,7 @@ function ParticipantPage() {
   const [currentComponent, setCurrentComponent] = useState("textSubmission");
   const navigate = useNavigate(); // Initialize useNavigate
   const [params]= useSearchParams();
+  const [participantService] = useState<ParticipantService>(new ParticipantService());
 
   useEffect(() => {
     // The format of a url with a room value is https://micrunner.click/participant?room=#
@@ -35,6 +37,12 @@ function ParticipantPage() {
         navigate("/");
       }
     }
+    try {
+      participantService.connectParticipant(roomNumber, (i: number) => setPlaceInLine(String(i)))
+    }
+    catch (err) {
+      console.log(err);
+    }
   }, [])
 
 
@@ -42,11 +50,11 @@ function ParticipantPage() {
 
   //////////DELETE LATER!! THIS IS JUST TO SIMULATE WAITING IN LINE///////////////////// 
 
-  if (currentComponent === "waitingInLine" && Number(placeInLine) > 0) {
-    setTimeout(() => {
-      setPlaceInLine(() => String(Math.max(0, Number(placeInLine) - 1)));
-    }, 1000); 
-  }
+  // if (currentComponent === "waitingInLine" && Number(placeInLine) > 0) {
+  //   setTimeout(() => {
+  //     setPlaceInLine(() => String(Math.max(0, Number(placeInLine) - 1)));
+  //   }, 1000);
+  // }
 
   // when you delete this, you might have to change the next if statement to not make it into a number first when comparing and just compare it to a string 0. 
   // you can also get rid of the setPlaceInLine from the userContext when you delete this
@@ -54,7 +62,8 @@ function ParticipantPage() {
   // sorry for the hassle! 
   ///////////////////////////////////////////////////////////////////////////////////// 
 
-  const handleSubmitText = () => {
+  const handleSubmitText = (text: string) => {
+    participantService.sendComment(text)
     setCurrentComponent("waitingInLine");
   };
 

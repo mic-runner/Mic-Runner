@@ -5,8 +5,8 @@ import { Message } from "./message";
 export class ParticipantConnection extends Connection {
   private conn: DataConnection;
 
-  constructor(userId: string, roomId: string, changeLinePos: (i: number) => void) {
-    super(userId);
+  constructor(roomId: string, changeLinePos: (i: number) => void) {
+    super("");
     this.conn = this.peer.connect(roomId);
     this.setupConnectionEvents(changeLinePos);
   }
@@ -25,6 +25,10 @@ export class ParticipantConnection extends Connection {
         console.log(`Comment: ${data.comment}`);
       }
     });
+
+    this.conn.on("close", () => {
+      console.log("Connection closed");
+    })
 
     this.conn.on("error", (err) => {
       console.error("Connection error", err);

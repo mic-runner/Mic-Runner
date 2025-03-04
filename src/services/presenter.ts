@@ -4,6 +4,9 @@ class PresenterService {
   private conn: PresenterConnection | null = null;
 
   public connectPresenter(roomId: string) {
+    if (this.conn) {
+      return;
+    }
     this.conn = new PresenterConnection(roomId);
   }
 
@@ -15,4 +18,4 @@ class PresenterService {
   }
 }
 
-export default new PresenterService();
+export default PresenterService;
