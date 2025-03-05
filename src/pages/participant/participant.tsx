@@ -5,6 +5,7 @@ import TextSubmission from "./textSubmission/TextSubmission";
 import PressToSpeak from "./pressToSpeak/PressToSpeak";
 import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
+import { ParticipantConnection } from "../../model/participantConnection";
 
 function ParticipantPage() {
   const userContext = useContext(UserContext);
@@ -13,29 +14,10 @@ function ParticipantPage() {
     throw new Error("ParticipantPage must be used within a UserProvider");
   }
 
-  const { username, roomNumber, placeInLine, setPlaceInLine, setRoomNumber } = userContext;
+  let { username, roomNumber, placeInLine, setPlaceInLine, setRoomNumber, participantConnection, setParticipantConnection } = userContext;
   const [currentComponent, setCurrentComponent] = useState("textSubmission");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
   const [params]= useSearchParams();
-
-  useEffect(() => {
-    // The format of a url with a room value is https://micrunner.click/participant?room=#
-    if (params.get("room")) {
-      setRoomNumber(params.get("room") as string);
-      console.log(`Room number set ${roomNumber}`)
-    }
-    //Normal application behavior
-    else {
-      console.log("No url params")
-
-      // If there is no room number navigate back to launch page
-      console.log(`Room number ${roomNumber}`);
-      if (!roomNumber) {
-        console.log("No room number")
-        navigate("/");
-      }
-    }
-  }, [])
 
 
 
@@ -54,8 +36,44 @@ function ParticipantPage() {
   // sorry for the hassle! 
   ///////////////////////////////////////////////////////////////////////////////////// 
 
-  const handleSubmitText = () => {
+  const updatePlaceInLine = (i: number) => {
+    placeInLine = i.toString();
+  }
+
+
+  useEffect(() => {
+    // The format of a URL with a room value is https://micrunner.click/participant?room=#
+    const roomFromURL = params.get("room");
+
+    if (roomFromURL) {
+      setRoomNumber(roomFromURL);
+      console.log(`Room number set from URL: ${roomFromURL}`);
+    } else if (!roomNumber) {
+      console.log("No room number in URL and user context");
+      navigate("/"); // Navigate to home page if there's no room number
+    } else {
+      console.log(`Room number set from context: ${roomNumber}`);
+    }
+  }, [params, roomNumber, setRoomNumber, navigate]);
+
+
+
+  
+  // Handle connection establishment once roomNumber is set
+  useEffect(() => {
+    if (roomNumber) {
+      console.log(`Establishing connection to room: ${roomNumber}`);
+      // TODO:
+      // USER ID MIGHT NEED TO BE UNIQUE AND IT WONT BE AS IT IS NOW!!
+      setParticipantConnection( new ParticipantConnection("TEST_USER_ID", roomNumber, updatePlaceInLine));
+    } else {
+      console.error("Room number not set, cannot establish connection.");
+    }
+  }, [roomNumber]); 
+
+  const handleSubmitText = (text: string) => {
     setCurrentComponent("waitingInLine");
+    participantConnection?.sendComment(text);
   };
 
   if (Number(placeInLine) === 0 && currentComponent === "waitingInLine") {

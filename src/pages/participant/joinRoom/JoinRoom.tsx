@@ -32,7 +32,9 @@ const JoinRoom: React.FC<JoinRoomProps> = (props) => {
     setUsername(user);
     setRoomNumber(room);
 
-    navigate("/participant", {
+
+
+    navigate(`/participant?room=${room}`, {
       state: { username: user, roomNumber: room },
     });
   };
