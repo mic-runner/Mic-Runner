@@ -1,0 +1,7 @@
+.host-room-button {
+  margin: 10vh 0 3vh 10vw;
+}
+
+.host-room-button:hover {
+  background-color: var(--secondary-color);
+}

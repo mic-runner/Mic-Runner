@@ -1,0 +1,21 @@
+.waiting-line-text-container{
+    text-align: left;
+    width: 80vw;
+    margin: 0 0 20vh 0;
+}
+
+.waiting-line-text-header{
+    font-size: 3.25em;
+    margin: 0;
+    font-weight: 400;
+    text-align: left;
+}
+
+.waiting-line-subtitle{
+    margin: 5vh 0 0 0;
+    font-weight: 400;
+}
+
+.next-in-line{
+    color: var(--accent);
+}

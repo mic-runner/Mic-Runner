@@ -1,0 +1,39 @@
+/* #participant-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100%;
+}
+
+#participant-header {
+  align-self: flex-start;
+}
+
+#participant-center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+#participant-title {
+  font-weight: 400;
+  margin: 10vh 0 0 10vw;
+  font-size: 3em;
+}
+
+#participant-username {
+  color: var(--secondary-color);
+  font-weight: 200;
+  margin: 0 0 0 10vw;
+  font-size: 1.3em;
+}
+
+#participant-room {
+  color: var(--primary-color);
+  font-weight: 400;
+  margin: 0 0 5vh 10vw;
+} */
+
+
