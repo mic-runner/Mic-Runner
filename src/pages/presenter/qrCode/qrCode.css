@@ -4,30 +4,33 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .join-box {
   display: flex;
   width: 100%;
   align-items: center;
-  margin-bottom: 0.75em;
+  justify-content: center;
+  margin-bottom: 2vh;
+  flex: 0 1 auto;
 }
 
 .qr-code {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1em;
-  margin-right: 1em;
+  padding: 0.5em;
   background-color: var(--primary-color);
-  border-radius: 0.25em;
+  border-radius: 0.15em;
+  max-height: 55vh;
 }
 
 .qr-placeholder {
-  width: 150px;
-  height: 150px;
+  width: 275px;
+  height: 275px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,10 +42,13 @@
 }
 
 .join-now {
-  flex: 1;
-  font-size: 2rem;
-  text-align: left;
+  font-size: 3rem;
+  text-align: center;
   line-height: 1.2;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 1.5em;
+  flex: 0 0 auto;
 }
 
 .link-box {
@@ -50,4 +56,19 @@
   width: 100%;
   text-align: center;
   font-size: 1.2rem;
+  margin-top: 1em;
+  word-break: break-all;
+  flex: 0 0 auto;
+  padding: 0 1em;
+}
+
+@media (max-height: 700px) {
+  .join-now {
+    font-size: 2.2rem;
+    margin-bottom: 1em;
+  }
+  
+  .link-box {
+    font-size: 1rem;
+  }
 }

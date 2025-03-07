@@ -9,23 +9,85 @@ interface Participant {
 
 interface ParticipantListProps {
   participants: Participant[];
+  currentParticipant: Participant | null;
+  onMute: () => void;
+  onNext: () => void;
+  hasNextParticipant: boolean;
 }
 
-const ParticipantList = ({ participants = [] }: ParticipantListProps) => {
+const ParticipantList = ({ 
+  participants = [], 
+  currentParticipant,
+  onMute,
+  onNext,
+  hasNextParticipant 
+}: ParticipantListProps) => {
   return (
-    <div className="next-up-section">
-      <h2 className="section-title">NEXT UP</h2>
+    <div className="participant-queue-container">
+      <div className="queue-header">
+        <h2 className="section-title">PARTICIPANTS</h2>
+        <div className="speaker-controls">
+          <button 
+            className="control-button mute-button"
+            onClick={onMute}
+            disabled={!currentParticipant}
+          >
+            {currentParticipant && currentParticipant.speaking ? "Mute" : "Unmute"}
+          </button>
+          <button 
+            className="control-button next-button"
+            onClick={onNext}
+            disabled={!hasNextParticipant}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+      
       <div className="participants-list">
+        {/* Current Speaker */}
+        {currentParticipant && (
+          <div className="current-speaker">
+            <div className="participant-item active">
+              <div className="participant-status">
+                <div className="mic-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 1C10.3431 1 9 2.34315 9 4V12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12V4C15 2.34315 13.6569 1 12 1Z" fill={currentParticipant.speaking ? "#E68888" : "#777777"}/>
+                    <path d="M7 12C7 12 7 14 12 14C17 14 17 12 17 12" stroke={currentParticipant.speaking ? "#E68888" : "#777777"} strokeWidth="2"/>
+                    <path d="M12 17V20" stroke={currentParticipant.speaking ? "#E68888" : "#777777"} strokeWidth="2"/>
+                    <path d="M8 20H16" stroke={currentParticipant.speaking ? "#E68888" : "#777777"} strokeWidth="2"/>
+                  </svg>
+                </div>
+                <span className="speaking-status">
+                  {currentParticipant.speaking ? "Speaking" : "Muted"}
+                </span>
+              </div>
+              <div className="participant-name">{currentParticipant.name}</div>
+              {currentParticipant.comment && (
+                <div className="participant-comment">{currentParticipant.comment}</div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        {/* Next Up Label */}
+        {participants.length > 0 && (
+          <div className="next-up-label">
+            NEXT UP
+          </div>
+        )}
+        
+        {/* Queue Participants */}
         {participants.length > 0 ? (
           participants.map((participant) => (
-            <div key={participant.id} className="participant-item">
+            <div key={participant.id} className="participant-item queue-item">
               <div className="participant-name">{participant.name}</div>
               {participant.comment && (
                 <div className="participant-comment">{participant.comment}</div>
               )}
             </div>
           ))
-        ) : (
+        ) : !currentParticipant && (
           <div className="no-participants">No participants in queue</div>
         )}
       </div>

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import "./presenterPage.css";
 import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
-import CurrentParticipant from "../currentParticipant/currentParticipant";
 import DataService, { Participant, RoomInfo } from "../../../services/dataService";
 import {useLocation, useNavigate} from "react-router-dom";
 
@@ -28,9 +27,7 @@ const PresenterPage = () => {
     else {
         // If the host has no room number navigate to the landing page
         navigate("/");
-        // We could alternatively generate a room number here
     }
-
   }, []);
 
   const nextParticipant = () => {
@@ -65,19 +62,18 @@ const PresenterPage = () => {
         </div>
 
         <div className="presenter-content">
-            <div className="left-column">
-                <div className="top-box">
-                    {roomInfo ? (<QRCodeSection joinUrl={(roomInfo as RoomInfo).joinUrl} />) : (<div className="qr-placeholder">QR CODE PLACEHOLDER</div>) }
-                </div>
-
-                <div className="bottom-box">
-                  <ParticipantList participants={participants} />
-                </div>
+            <div className="qr-column">
+                {roomInfo ? (
+                  <QRCodeSection joinUrl={(roomInfo as RoomInfo).joinUrl} />
+                ) : (
+                  <div className="qr-placeholder">QR CODE PLACEHOLDER</div>
+                )}
             </div>
 
-            <div className="right-column">
-              <CurrentParticipant 
-                participant={currentParticipant}
+            <div className="participant-column">
+              <ParticipantList 
+                participants={participants} 
+                currentParticipant={currentParticipant}
                 onMute={toggleMute}
                 onNext={nextParticipant}
                 hasNextParticipant={participants.length > 0 || currentParticipant !== null}

@@ -14,7 +14,7 @@
   flex-direction: column;
   gap: 1em;
   overflow-y: auto;
-  max-height: calc(100% - 3em);
+  height: 100%;
   /* Scrollbar styling */
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) rgba(242, 229, 229, 0.1);
@@ -38,19 +38,107 @@
 .no-participants {
   color: rgba(242, 229, 229, 0.6);
   font-style: italic;
+  padding: 1em;
+  text-align: center;
 }
 
 .participant-item {
-  padding: 0.5em 0;
-  border-bottom: 1px solid rgba(242, 229, 229, 0.1);
+  padding: 1em;
+  border: 1px solid rgba(242, 229, 229, 0.1);
+  border-radius: 4px;
+  background-color: rgba(242, 229, 229, 0.03);
 }
 
 .participant-name {
   color: var(--primary-color);
   margin-bottom: 0.25em;
+  font-size: 1.1rem;
 }
 
 .participant-comment {
   font-size: 0.9rem;
   opacity: 0.8;
+}
+
+.participant-queue-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.speaker-controls {
+  display: flex;
+  gap: 0.75em;
+}
+
+.control-button {
+  padding: 0.5em 1em;
+  background: transparent;
+  border: 1px solid var(--text);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+}
+
+.control-button:hover {
+  background: rgba(242, 229, 229, 0.1);
+}
+
+.control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mute-button {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.next-button {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.current-speaker {
+  margin-bottom: 1em;
+}
+
+.participant-item.active {
+  background-color: rgba(230, 136, 136, 0.1);
+  border-color: var(--primary-color);
+}
+
+.participant-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.mic-icon {
+  margin-right: 0.5em;
+}
+
+.speaking-status {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+}
+
+.next-up-label {
+  font-size: 0.9rem;
+  color: rgba(242, 229, 229, 0.7);
+  margin: 0.5em 0;
+  padding-left: 0.5em;
+}
+
+.queue-item {
+  padding: 0.75em 1em;
 }
