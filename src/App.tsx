@@ -10,7 +10,7 @@ import Presenter from "./pages/presenter/presenterPage/presenterPage.tsx";
 
 function App() {
   return (
-    <HashRouter basename={import.meta.env.BASE_URL}>
+    <HashRouter>
       <UserProvider>
         <Routes>
           {/* Default landing page */}
