@@ -50,6 +50,23 @@
   border: 1px solid rgba(242, 229, 229, 0.1);
   border-radius: 4px;
   background-color: rgba(242, 229, 229, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.participant-item.queue-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: grab;
+}
+
+.participant-item.queue-item:active {
+  cursor: grabbing;
+}
+
+.participant-item-content {
+  flex: 1;
+  min-width: 0; /* Prevents flex items from overflowing */
 }
 
 .participant-name {
@@ -164,4 +181,66 @@
 
 .queue-item {
   padding: 0.75em 1em;
+}
+
+/* Drag and drop styles */
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  padding: 0.25em;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-left: 0.5em;
+}
+
+.participant-item:hover .delete-button {
+  opacity: 0.7;
+}
+
+.delete-button:hover {
+  opacity: 1 !important;
+  background: rgba(230, 136, 136, 0.2);
+}
+
+.drag-handle {
+  margin-left: 0.75em;
+  display: flex;
+  align-items: center;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+  cursor: grab;
+}
+
+.participant-item:hover .drag-handle {
+  opacity: 0.8;
+}
+
+.participant-item.dragging {
+  opacity: 0.6;
+  transform: scale(0.98);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.participant-item.drop-target {
+  border: 1px dashed var(--primary-color);
+  background-color: rgba(230, 136, 136, 0.1);
+  transform: scale(1.01);
+}
+
+/* Add a separator to indicate where the item will drop */
+.participant-item.drop-target::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--primary-color);
+  opacity: 0.8;
 }

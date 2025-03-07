@@ -1,4 +1,5 @@
 import "./participantQueue.css";
+import { useState, useRef } from "react";
 
 interface Participant {
   id: number;
@@ -13,6 +14,8 @@ interface ParticipantListProps {
   onMute: () => void;
   onNext: () => void;
   hasNextParticipant: boolean;
+  onReorder: (fromIndex: number, toIndex: number) => void;
+  onDelete: (participantId: number) => void;
 }
 
 const ParticipantList = ({ 
@@ -20,8 +23,58 @@ const ParticipantList = ({
   currentParticipant,
   onMute,
   onNext,
-  hasNextParticipant 
+  hasNextParticipant,
+  onReorder,
+  onDelete
 }: ParticipantListProps) => {
+  const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
+  const [targetIndex, setTargetIndex] = useState<number | null>(null);
+  const dragNodeRef = useRef<HTMLDivElement | null>(null);
+
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    // Store a reference to the node being dragged
+    dragNodeRef.current = e.currentTarget;
+    
+    // Add styling to the dragged item
+    e.currentTarget.classList.add("dragging");
+    
+    // Set the data being dragged (required for Firefox)
+    e.dataTransfer.setData("text/plain", index.toString());
+    e.dataTransfer.effectAllowed = "move";
+    
+    // Highlight the dragged item
+    setDraggedItemIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.preventDefault();
+    
+    // Exit if we're dragging over the same item or we don't have a dragged item
+    if (draggedItemIndex === null || draggedItemIndex === index) {
+      setTargetIndex(null);
+      return;
+    }
+
+    setTargetIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    // Clean up drag state
+    if (dragNodeRef.current) {
+      dragNodeRef.current.classList.remove("dragging");
+      dragNodeRef.current = null;
+    }
+    
+    // If we have both a source and target, reorder
+    if (draggedItemIndex !== null && targetIndex !== null && draggedItemIndex !== targetIndex) {
+      onReorder(draggedItemIndex, targetIndex);
+    }
+    
+    // Reset drag state
+    setDraggedItemIndex(null);
+    setTargetIndex(null);
+  };
+
   return (
     <div className="participant-queue-container">
       <div className="queue-header">
@@ -81,12 +134,36 @@ const ParticipantList = ({
         {/* Queue Participants - These will be in the scrollable area */}
         <div className="participants-list">
           {participants.length > 0 ? (
-            participants.map((participant) => (
-              <div key={participant.id} className="participant-item queue-item">
-                <div className="participant-name">{participant.name}</div>
-                {participant.comment && (
-                  <div className="participant-comment">{participant.comment}</div>
-                )}
+            participants.map((participant, index) => (
+              <div 
+                key={participant.id} 
+                className={`participant-item queue-item ${draggedItemIndex === index ? 'dragging' : ''} ${targetIndex === index ? 'drop-target' : ''}`}
+                draggable
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragEnd={handleDragEnd}
+              >
+                <div className="participant-item-content">
+                  <div className="participant-name">{participant.name}</div>
+                  {participant.comment && (
+                    <div className="participant-comment">{participant.comment}</div>
+                  )}
+                </div>
+                <button 
+                  className="delete-button" 
+                  onClick={() => onDelete(participant.id)}
+                  aria-label="Delete participant"
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.5 3H9.5L8.5 4H5V6H19V4Z" fill="#E68888"/>
+                  </svg>
+                </button>
+                <div className="drag-handle" title="Drag to reorder">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 10H17" stroke="#E68888" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M7 14H17" stroke="#E68888" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
               </div>
             ))
           ) : !currentParticipant && (

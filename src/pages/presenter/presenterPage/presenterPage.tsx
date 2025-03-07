@@ -52,6 +52,26 @@ const PresenterPage = () => {
     }
   };
 
+  // Handle reordering of participants
+  const handleReorderParticipants = (fromIndex: number, toIndex: number) => {
+    // Create a copy of the participants array
+    const updatedParticipants = [...participants];
+    
+    // Remove the dragged item
+    const [draggedItem] = updatedParticipants.splice(fromIndex, 1);
+    
+    // Insert it at the new position
+    updatedParticipants.splice(toIndex, 0, draggedItem);
+    
+    // Update state with new order
+    setParticipants(updatedParticipants);
+  };
+
+  // Handle deleting a participant
+  const handleDeleteParticipant = (participantId: number) => {
+    setParticipants(participants.filter(p => p.id !== participantId));
+  };
+
   return (
     <div className="presenter-layout"> 
       <div className="inner-presenter-layout">
@@ -77,6 +97,8 @@ const PresenterPage = () => {
                 onMute={toggleMute}
                 onNext={nextParticipant}
                 hasNextParticipant={participants.length > 0 || currentParticipant !== null}
+                onReorder={handleReorderParticipants}
+                onDelete={handleDeleteParticipant}
               />
             </div>
         </div>
