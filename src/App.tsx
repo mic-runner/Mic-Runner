@@ -10,7 +10,9 @@ import Presenter from "./pages/presenter/presenterPage/presenterPage.tsx";
 
 function App() {
   return (
-    <BrowserRouter basename="/Mic-Runner">
+
+    // IF IN DEVELOPMENT, SHOULDN'T HAVE A BASENAME
+    <BrowserRouter basename={import.meta.env.VITE_APP_BASENAME}>
       <UserProvider>
         <Routes>
           {/* Default landing page */}
