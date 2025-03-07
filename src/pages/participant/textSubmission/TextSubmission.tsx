@@ -5,17 +5,22 @@ interface TextSubmissionProps {
   textboxPlaceholder: string;
   buttonPlaceholder: string;
   textSubmissionHeader: string;
-  onSubmitText: () => void;
+  onSubmitText: (text: string) => void;
 }
+
+// TODO:
+// when the connection is closed, it navigates to the text submission place in line.
 
 const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
   const [text, setText] = useState("");
+
+
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
     alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
     setText("");
-    props.onSubmitText(); 
+    props.onSubmitText(text); 
   };
 
   return (

@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://mic-runner.github.io/Mic-Runner",
   "scripts": {
     "start": "vite",
     "build": "tsc -b && vite build",
@@ -33,6 +34,7 @@
     "jest": "^29.7.0",
     "typescript": "5.5",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vite-plugin-gh-pages": "^1.0.1"
   }
 }
