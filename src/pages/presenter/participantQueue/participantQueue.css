@@ -6,6 +6,7 @@
 
 .section-title {
   font-size: 1.2rem;
+  font-weight: 500;
   margin-bottom: 1em;
 }
 
@@ -15,9 +16,11 @@
   gap: 1em;
   overflow-y: auto;
   height: 100%;
+  flex: 1; /* Takes remaining height */
   /* Scrollbar styling */
   scrollbar-width: thin;
   scrollbar-color: var(--primary-color) rgba(242, 229, 229, 0.1);
+  padding-right: 4px; /* Add space for scrollbar */
 }
 
 /* Webkit scrollbar styling */
@@ -58,6 +61,7 @@
 .participant-comment {
   font-size: 0.9rem;
   opacity: 0.8;
+  line-height: 1.4;
 }
 
 .participant-queue-container {
@@ -71,6 +75,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1em;
+  flex: 0 0 auto; /* Fixed height, doesn't grow or shrink */
 }
 
 .speaker-controls {
@@ -108,6 +113,31 @@
   color: var(--text);
 }
 
+/* Current speaker styles - fixed outside scrollable area */
+.current-speaker-wrapper {
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid rgba(242, 229, 229, 0.15);
+  flex: 0 0 auto; /* Fixed height, doesn't grow or shrink */
+}
+
+/* Queue scrollable container */
+.queue-scrollable-section {
+  flex: 1 1 auto; /* Will take remaining space and allow scrolling */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* Crucial for Firefox to respect parent's flex constraints */
+}
+
+.next-up-label {
+  font-size: 0.9rem;
+  color: rgba(242, 229, 229, 0.7);
+  margin-bottom: 0.5em;
+  padding-left: 0.5em;
+  flex: 0 0 auto;
+}
+
 .current-speaker {
   margin-bottom: 1em;
 }
@@ -130,13 +160,6 @@
 .speaking-status {
   font-size: 0.8rem;
   color: var(--primary-color);
-}
-
-.next-up-label {
-  font-size: 0.9rem;
-  color: rgba(242, 229, 229, 0.7);
-  margin: 0.5em 0;
-  padding-left: 0.5em;
 }
 
 .queue-item {

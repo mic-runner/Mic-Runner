@@ -26,6 +26,21 @@ class DataService {
       id: 3,
       name: "Username789",
       comment: "I have a question about orders of ignorance"
+    },
+    {
+      id: 4,
+      name: "Username123",
+      comment: "I have a comment related to frasgerd I have a question about orders of ignorance 2 I have a question about orders of ignorance 2 I have a question about orders of ignorance 2I have a question about orders of ignorance 2 I have a question about orders of ignorance 2I have a question about orders of ignorance 2"
+    },
+    {
+      id: 5,
+      name: "Username456",
+      comment: ""
+    },
+    {
+      id: 6,
+      name: "Username789",
+      comment: "I have a question about orders of ignorance"
     }
   ];
 
