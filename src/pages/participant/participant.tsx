@@ -65,7 +65,7 @@ function ParticipantPage() {
       console.log(`Establishing connection to room: ${roomNumber}`);
       // TODO:
       // USER ID MIGHT NEED TO BE UNIQUE AND IT WONT BE AS IT IS NOW!!
-      setParticipantConnection( new ParticipantConnection("TEST_USER_ID", roomNumber, updatePlaceInLine));
+      setParticipantConnection( new ParticipantConnection("", roomNumber, updatePlaceInLine));
     } else {
       console.error("Room number not set, cannot establish connection.");
     }

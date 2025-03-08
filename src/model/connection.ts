@@ -15,9 +15,17 @@ export abstract class Connection {
   };
 
   constructor(peerId: string) {
-    this.peer = new Peer(peerId, {
-      config: this.iceConfig,
-      debug: 3,
-    });
+    if (!peerId) {
+      this.peer = new Peer({
+        config: this.iceConfig,
+        debug: 3,
+      })
+    }
+    else {
+      this.peer = new Peer(peerId, {
+        config: this.iceConfig,
+        debug: 3,
+      });
+    }
   }
 }

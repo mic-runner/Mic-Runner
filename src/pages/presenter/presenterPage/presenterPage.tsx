@@ -1,16 +1,19 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useRef} from "react";
 import "./presenterPage.css";
 import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
 import DataService, { Participant, RoomInfo } from "../../../services/dataService";
 import {useLocation, useNavigate} from "react-router-dom";
+import {PresenterConnection} from "../../../model/presenterConnection.ts";
 
 const PresenterPage = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
+  const [service, setService] = useState<PresenterConnection>();
   const [currentParticipant, setCurrentParticipant] = useState<Participant | null>(null);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const { state } = useLocation();
   const navigate = useNavigate();
+  const initialized = useRef<boolean>(false);
 
   useEffect(() => {
     setParticipants(DataService.getParticipants());
@@ -19,9 +22,12 @@ const PresenterPage = () => {
         // Keeping the roomInfo object for centralization of updates
         const room: RoomInfo = {
             roomNumber: state.room,
-            joinUrl: `${window.location.origin}/participant?room=${state.room}`,
+            joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}/participant?room=${state.room}`,
         };
-
+        if (!initialized.current) {
+          initialized.current = true;
+          setService(new PresenterConnection(state.room))
+        }
         setRoomInfo(room);
     }
     else {
