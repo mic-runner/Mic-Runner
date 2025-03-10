@@ -1,15 +1,19 @@
-import {useState, useEffect, useRef} from "react";
+import { useState, useEffect, useRef } from "react";
 import "./presenterPage.css";
 import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
-import DataService, { Participant, RoomInfo } from "../../../services/dataService";
-import {useLocation, useNavigate} from "react-router-dom";
-import {PresenterConnection} from "../../../model/presenterConnection.ts";
+import DataService, {
+  Participant,
+  RoomInfo,
+} from "../../../services/dataService";
+import { useLocation, useNavigate } from "react-router-dom";
+import { PresenterConnection } from "../../../model/presenterConnection.ts";
 
 const PresenterPage = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
-  const [service, setService] = useState<PresenterConnection>();
-  const [currentParticipant, setCurrentParticipant] = useState<Participant | null>(null);
+  const [, setService] = useState<PresenterConnection>();
+  const [currentParticipant, setCurrentParticipant] =
+    useState<Participant | null>(null);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -19,20 +23,21 @@ const PresenterPage = () => {
     setParticipants(DataService.getParticipants());
 
     if (state) {
-        // Keeping the roomInfo object for centralization of updates
-        const room: RoomInfo = {
-            roomNumber: state.room,
-            joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}/participant?room=${state.room}`,
-        };
-        if (!initialized.current) {
-          initialized.current = true;
-          setService(new PresenterConnection(state.room))
-        }
-        setRoomInfo(room);
-    }
-    else {
-        // If the host has no room number navigate to the landing page
-        navigate("/");
+      // Keeping the roomInfo object for centralization of updates
+      const room: RoomInfo = {
+        roomNumber: state.room,
+        joinUrl: `${
+          window.location.origin + import.meta.env.VITE_APP_BASENAME
+        }/participant?room=${state.room}`,
+      };
+      if (!initialized.current) {
+        initialized.current = true;
+        setService(new PresenterConnection(state.room));
+      }
+      setRoomInfo(room);
+    } else {
+      // If the host has no room number navigate to the landing page
+      navigate("/");
     }
   }, []);
 
@@ -40,9 +45,9 @@ const PresenterPage = () => {
     if (participants.length > 0) {
       setCurrentParticipant({
         ...participants[0],
-        speaking: true
+        speaking: true,
       });
-      
+
       setParticipants(participants.slice(1));
     } else {
       setCurrentParticipant(null);
@@ -53,7 +58,7 @@ const PresenterPage = () => {
     if (currentParticipant) {
       setCurrentParticipant({
         ...currentParticipant,
-        speaking: !currentParticipant.speaking
+        speaking: !currentParticipant.speaking,
       });
     }
   };
@@ -62,55 +67,56 @@ const PresenterPage = () => {
   const handleReorderParticipants = (fromIndex: number, toIndex: number) => {
     // Create a copy of the participants array
     const updatedParticipants = [...participants];
-    
+
     // Remove the dragged item
     const [draggedItem] = updatedParticipants.splice(fromIndex, 1);
-    
+
     // Insert it at the new position
     updatedParticipants.splice(toIndex, 0, draggedItem);
-    
+
     // Update state with new order
     setParticipants(updatedParticipants);
   };
 
   // Handle deleting a participant
   const handleDeleteParticipant = (participantId: number) => {
-    setParticipants(participants.filter(p => p.id !== participantId));
+    setParticipants(participants.filter((p) => p.id !== participantId));
   };
 
   return (
-    <div className="presenter-layout"> 
+    <div className="presenter-layout">
       <div className="inner-presenter-layout">
-        
         <div className="presenter-header">
           <h1 className="presenter-title">Mic Runner</h1>
           <p className="room-number">Room {roomInfo?.roomNumber}</p>
         </div>
 
         <div className="presenter-content">
-            <div className="qr-column">
-                {roomInfo ? (
-                  <QRCodeSection joinUrl={(roomInfo as RoomInfo).joinUrl} />
-                ) : (
-                  <div className="qr-placeholder">QR CODE PLACEHOLDER</div>
-                )}
-            </div>
+          <div className="qr-column">
+            {roomInfo ? (
+              <QRCodeSection joinUrl={(roomInfo as RoomInfo).joinUrl} />
+            ) : (
+              <div className="qr-placeholder">QR CODE PLACEHOLDER</div>
+            )}
+          </div>
 
-            <div className="participant-column">
-              <ParticipantList 
-                participants={participants} 
-                currentParticipant={currentParticipant}
-                onMute={toggleMute}
-                onNext={nextParticipant}
-                hasNextParticipant={participants.length > 0 || currentParticipant !== null}
-                onReorder={handleReorderParticipants}
-                onDelete={handleDeleteParticipant}
-              />
-            </div>
+          <div className="participant-column">
+            <ParticipantList
+              participants={participants}
+              currentParticipant={currentParticipant}
+              onMute={toggleMute}
+              onNext={nextParticipant}
+              hasNextParticipant={
+                participants.length > 0 || currentParticipant !== null
+              }
+              onReorder={handleReorderParticipants}
+              onDelete={handleDeleteParticipant}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default PresenterPage;
