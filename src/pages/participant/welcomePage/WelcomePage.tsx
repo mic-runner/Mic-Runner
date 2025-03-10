@@ -15,7 +15,7 @@ function WelcomePage() {
       </div>
 
       <div id="participant-center">
-        <JoinRoom textboxPlaceholder="Room Number" buttonPlaceholder="Enter" />
+        <JoinRoom textboxPlaceholder="Room number?" buttonPlaceholder="Enter" />
       </div>
 
       <div id="participant-footer">

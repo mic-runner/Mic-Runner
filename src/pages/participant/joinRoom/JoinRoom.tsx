@@ -32,8 +32,6 @@ const JoinRoom: React.FC<JoinRoomProps> = (props) => {
     setUsername(user);
     setRoomNumber(room);
 
-
-
     navigate(`/participant?room=${room}`, {
       state: { username: user, roomNumber: room },
     });
@@ -41,13 +39,14 @@ const JoinRoom: React.FC<JoinRoomProps> = (props) => {
 
   return (
     <form className="text-form" onSubmit={handleSubmitText}>
-      <textarea
+      <text className="join-text">Join a Room</text>
+      <input
         value={user}
         onChange={(e) => setUser(e.target.value)}
         className="text-input"
-        placeholder="Name"
+        placeholder="What's your name?"
       />
-      <textarea
+      <input
         value={room}
         onChange={(e) => setRoom(e.target.value)}
         className="text-input"
