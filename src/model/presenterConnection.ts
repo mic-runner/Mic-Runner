@@ -9,6 +9,10 @@ export class PresenterConnection extends Connection {
   constructor(roomId: string) {
     super(roomId);
 
+    this.peer.on("open", () => {
+      console.log("Opened peer");
+    })
+
     this.allconnections = new Set<DataConnection>();
     this.connectionQueue = [];
 

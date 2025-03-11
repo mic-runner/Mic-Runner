@@ -11,11 +11,11 @@ import { PresenterConnection } from "../../../model/presenterConnection.ts";
 
 const PresenterPage = () => {
   const [participants, setParticipants] = useState<Participant[]>([]);
-  const [, setService] = useState<PresenterConnection>();
-  const [currentParticipant, setCurrentParticipant] =
-    useState<Participant | null>(null);
-  const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
   const { state } = useLocation();
+  const [service, setService] = useState<PresenterConnection>();
+  const [currentParticipant, setCurrentParticipant] = useState<Participant | null>(null);
+  const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
+
   const navigate = useNavigate();
   const initialized = useRef<boolean>(false);
 
@@ -23,21 +23,21 @@ const PresenterPage = () => {
     setParticipants(DataService.getParticipants());
 
     if (state) {
-      // Keeping the roomInfo object for centralization of updates
-      const room: RoomInfo = {
-        roomNumber: state.room,
-        joinUrl: `${
-          window.location.origin + import.meta.env.VITE_APP_BASENAME
-        }/participant?room=${state.room}`,
-      };
-      if (!initialized.current) {
-        initialized.current = true;
-        setService(new PresenterConnection(state.room));
-      }
-      setRoomInfo(room);
-    } else {
-      // If the host has no room number navigate to the landing page
-      navigate("/");
+        // Keeping the roomInfo object for centralization of updates
+        const room: RoomInfo = {
+            roomNumber: state.room,
+            joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}/participant?room=${state.room}`,
+        };
+        if (!initialized.current) {
+          initialized.current = true;
+          setService(new PresenterConnection(state.room))
+          service?.sendLinePositions()
+        }
+        setRoomInfo(room);
+    }
+    else {
+        // If the host has no room number navigate to the landing page
+        navigate("/");
     }
   }, []);
 
