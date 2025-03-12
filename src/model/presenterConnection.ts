@@ -31,9 +31,12 @@ export class PresenterConnection extends Connection {
       conn.on("data", (body: any) => {
         const data = body as Message;
         console.log(`Received from participant ${conn.peer}: ${data}`);
+        console.log(data);
         if (data.comment) {
           console.log(`Comment: ${data.comment}`);
           this.connectionQueue.push(conn);
+          console.log("Queue after adding connection", conn, this.connectionQueue);
+
           this.sendLinePositions();
         }
       });
@@ -52,9 +55,15 @@ export class PresenterConnection extends Connection {
 
   sendLinePositions() {
     this.connectionQueue.forEach((conn, place) => {
+      console.log("Sending position to peer", conn.peer);
+      console.log({
+        type: "linePos",
+        place,
+      });
+      console.log("Connection open?", conn.open);
       conn.send({
         type: "linePos",
-        linePos: place,
+        place,
       });
     });
   }
