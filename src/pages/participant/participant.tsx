@@ -5,7 +5,9 @@ import TextSubmission from "./textSubmission/TextSubmission";
 import PressToSpeak from "./pressToSpeak/PressToSpeak";
 import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
-import { ParticipantConnection } from "../../model/participantConnection";
+import Loading from "../miscPages/Loading.tsx";
+import ConnectionErrorPage from "../miscPages/ConnectionError.tsx";
+import ParticipantService from "../../services/participant.ts";
 
 function ParticipantPage() {
   const userContext = useContext(UserContext);
@@ -14,7 +16,8 @@ function ParticipantPage() {
     throw new Error("ParticipantPage must be used within a UserProvider");
   }
 
-  let { username, roomNumber, placeInLine, setPlaceInLine, setRoomNumber, participantConnection, setParticipantConnection } = userContext;
+  const { username, roomNumber, placeInLine, setPlaceInLine, setRoomNumber} = userContext;
+  const [service] = useState(new ParticipantService())
   const [currentComponent, setCurrentComponent] = useState("textSubmission");
   const navigate = useNavigate(); 
   const [params]= useSearchParams();
@@ -65,7 +68,13 @@ function ParticipantPage() {
       console.log(`Establishing connection to room: ${roomNumber}`);
       // TODO:
       // USER ID MIGHT NEED TO BE UNIQUE AND IT WONT BE AS IT IS NOW!!
-      setParticipantConnection( new ParticipantConnection("", roomNumber, updatePlaceInLine));
+      try {
+        service.connectParticipant("", roomNumber, updatePlaceInLine);
+      }
+      catch (e) {
+        console.error("Failed to load connection", e);
+        navigate("/");
+      }
     } else {
       console.error("Room number not set, cannot establish connection.");
     }
@@ -73,7 +82,14 @@ function ParticipantPage() {
 
   const handleSubmitText = (text: string) => {
     setCurrentComponent("waitingInLine");
-    participantConnection?.sendComment(text);
+    setPlaceInLine("loading")
+    try {
+      service.sendComment(text);
+    }
+    catch (e) {
+      console.error("Failed to load connection", e);
+      setCurrentComponent("connectionError");
+    }
   };
 
   if (Number(placeInLine) === 0 && currentComponent === "waitingInLine") {
@@ -104,10 +120,14 @@ function ParticipantPage() {
             onSubmitText={handleSubmitText}
           />
         )}
-        {currentComponent === "waitingInLine" && (
+        {currentComponent === "waitingInLine" && placeInLine === "loading" && (
+            <Loading roomNumber={roomNumber} />
+        )}
+        {currentComponent === "waitingInLine" && placeInLine !== "loading" && (
           <WaitingInLine placeInLine={placeInLine.toString()} />
         )}
         {currentComponent === "pressToSpeak" && <PressToSpeak />}
+        {currentComponent === "connectionError" && <ConnectionErrorPage />}
       </div>
 
       <div id="participant-footer">

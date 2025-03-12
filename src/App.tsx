@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Participant from "./pages/participant/participant.tsx";
-import ErrorPage from "./pages/errorPage/ErrorPage.tsx";
+import ErrorPage from "./pages/miscPages/ErrorPage.tsx";
 import WelcomePage from "./pages/participant/welcomePage/WelcomePage.tsx";
 
 import { UserProvider } from "./components/UserContext.tsx";

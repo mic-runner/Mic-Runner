@@ -1,11 +1,14 @@
 import { DataConnection } from "peerjs";
 import { Connection } from "./connection";
 import { Message } from "./message";
+import ConnectionError from "../components/connectionError.ts";
 
 export class ParticipantConnection extends Connection {
   private conn: DataConnection;
   private peerID: string;
   private changePos: (i: number) => void;
+  private waitBeforeTimeout: number = 30; // Number in seconds
+  private waitTime = 5000; // Number in milliseconds
 
   constructor(userId: string, roomId: string, changeLinePos: (i: number) => void) {
     super(userId);
@@ -13,7 +16,14 @@ export class ParticipantConnection extends Connection {
     this.peer.on('error', (err) => {
       console.error("Connection error", err);
       console.error("Trying to connect");
-      this.conn = this.peer.connect(this.peerID);
+      if (this.waitBeforeTimeout > 0) {
+        this.waitBeforeTimeout -= this.waitTime / 1000;
+        this.conn = this.peer.connect(this.peerID);
+      }
+      else {
+        console.error("Failed to connect", err);
+        throw new ConnectionError("Failed to connect");
+      }
     })
     this.conn = this.peer.connect(roomId);
     console.log("Connected to ", this.conn.peer);
@@ -60,17 +70,24 @@ export class ParticipantConnection extends Connection {
     this.setupConnectionEvents(this.changePos);
   }
 
-  public sendComment(comment: string) {
+  public sendComment(comment: string){
     if (this.conn.open) {
+      this.waitBeforeTimeout = 30;
       this.conn.send({ type: "comment", comment });
     }
     else {
       console.log("Connection not open");
       this.reconnect()
-      setTimeout(() => {
-        this.sendComment(comment);
-      }, 5000)
-      return
+      if (this.waitBeforeTimeout > 0) {
+        setTimeout(() => {
+          this.waitBeforeTimeout -= this.waitTime / 1000;
+          this.sendComment(comment);
+        }, this.waitTime);
+      }
+      else {
+        console.error(`Failed to connect timeout: ${this.waitBeforeTimeout}; time between attempts (ms): ${this.waitTime}`);
+        throw new ConnectionError("Failed to reconnect");
+      }
     }
   }
 }

@@ -15,4 +15,4 @@ class ParticipantService {
   }
 }
 
-export default new ParticipantService();
+export default ParticipantService;
