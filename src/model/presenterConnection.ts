@@ -54,16 +54,16 @@ export class PresenterConnection extends Connection {
   }
 
   sendLinePositions() {
-    this.connectionQueue.forEach((conn, place) => {
+    this.connectionQueue.forEach((conn, linePos) => {
       console.log("Sending position to peer", conn.peer);
       console.log({
         type: "linePos",
-        place,
+        linePos,
       });
       console.log("Connection open?", conn.open);
       conn.send({
         type: "linePos",
-        place,
+        linePos,
       });
     });
   }
