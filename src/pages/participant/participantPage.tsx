@@ -4,7 +4,7 @@ import { UserContext } from "../../components/UserContext.tsx";
 import TextSubmission from "./textSubmission/TextSubmission.tsx";
 import PressToSpeak from "./pressToSpeak/PressToSpeak.tsx";
 import WaitingInLine from "./waitingInLine/WaitingInLine.tsx";
-import "./participant.css";
+import "./participantPage.css";
 import Loading from "../miscPages/Loading.tsx";
 import ConnectionErrorPage from "../miscPages/ConnectionError.tsx";
 import ParticipantService from "../../services/participantService.ts";
