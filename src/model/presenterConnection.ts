@@ -53,7 +53,11 @@ export class PresenterConnection extends Connection {
   }
 
   public deleteConnection(peerId: string) {
-    this.allconnections.delete(peerId);
+    const conn = this.allconnections.get(peerId);
+    if (conn) {
+      conn.close();
+      this.allconnections.delete(peerId);
+    }
   }
 
   public sendMessageToParticipant(peerId: string, message: MessageToParticipant) {
@@ -62,7 +66,7 @@ export class PresenterConnection extends Connection {
       console.error("Connection not found");
       return;
     }
-    
+
     conn.send(message);
   }
   
