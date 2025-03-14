@@ -1,3 +1,4 @@
+import { MessageToPresenter } from "../model/messageToPresenter";
 import { ParticipantConnection } from "../model/participantConnection";
 
 class ParticipantService {
@@ -7,11 +8,17 @@ class ParticipantService {
     this.conn = new ParticipantConnection(userId, roomId, changeLinePos);
   }
 
-  public sendComment(comment: string) {
+  public sendComment(comment: string, username: string) {
     if (!this.conn) {
       throw new Error("Connection not established");
     }
-    this.conn.sendComment(comment);
+
+    const message: MessageToPresenter = {
+      comment: comment,
+      username: username,
+    }
+
+    this.conn.sendComment(message);
   }
 }
 

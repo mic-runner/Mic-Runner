@@ -1,75 +1,71 @@
 import { DataConnection } from "peerjs";
 import { Connection } from "./connection";
-import { Message } from "./message";
+import { MessageToPresenter } from "./messageToPresenter";
+import { MessageToParticipant } from "./messageToParticipant";
+
+
+export interface IPresenterService {
+  connectionOpened: (conn: DataConnection) => void;
+  messageReceived: (peerId: string, message: MessageToPresenter) => void;
+  connectionClosed: (peerId: string) => void;
+  connectionError: (peerId: string, err: any) => void;
+}
+
+
 
 export class PresenterConnection extends Connection {
-  private allconnections: Set<DataConnection>;
-  private connectionQueue: DataConnection[];
 
-  constructor(roomId: string) {
+  private presenterService: IPresenterService;
+
+  private allconnections: Map<string, DataConnection> = new Map();
+
+  constructor(roomId: string, presenterService: IPresenterService) {
     super(roomId);
-
-    this.peer.on("open", () => {
-      console.log("Opened peer");
-    })
-
-    this.allconnections = new Set<DataConnection>();
-    this.connectionQueue = [];
+    this.presenterService = presenterService;
 
     this.setupPeerEvents();
   }
 
   private setupPeerEvents() {
     this.peer.on("connection", (conn) => {
-      console.log(`Participant ${conn.peer} connected`);
-      this.allconnections.add(conn);
 
       conn.on("open", () => {
-        console.log(`Participant ${conn.peer} connected`);
+        this.presenterService.connectionOpened(conn);
       });
 
       conn.on("data", (body: any) => {
-        const data = body as Message;
-        console.log(`Received from participant ${conn.peer}: ${data}`);
-        console.log(data);
-        if (data.comment) {
-          console.log(`Comment: ${data.comment}`);
-          this.connectionQueue.push(conn);
-          console.log("Queue after adding connection", conn, this.connectionQueue);
-
-          this.sendLinePositions();
-        }
+        this.presenterService.messageReceived(conn.peer, body as MessageToPresenter);
       });
 
       conn.on("close", () => {
-        console.log(`Participant ${conn.peer} disconnected`);
-        this.allconnections.delete(conn);
-        this.connectionQueue = this.connectionQueue.filter((c) => c !== conn);
+        this.presenterService.connectionClosed(conn.peer);
       });
 
       conn.on("error", (err) => {
-        console.error(`Connection error with participant ${conn.peer}`, err);
+        this.presenterService.connectionError(conn.peer, err);
       });
     });
   }
 
-  sendLinePositions() {
-    this.connectionQueue.forEach((conn, linePos) => {
-      console.log("Sending position to peer", conn.peer);
-      console.log({
-        type: "linePos",
-        linePos,
-      });
-      console.log("Connection open?", conn.open);
-      conn.send({
-        type: "linePos",
-        linePos,
-      });
-    });
+
+  public addConnection(conn: DataConnection) {
+    this.allconnections.set(conn.peer, conn);
   }
 
-  public nextParticipant() {
-    this.connectionQueue.shift();
-    this.sendLinePositions();
+  public deleteConnection(peerId: string) {
+    this.allconnections.delete(peerId);
   }
+
+  public sendMessageToParticipant(peerId: string, message: MessageToParticipant) {
+    const conn = this.allconnections.get(peerId);
+    if (!conn) {
+      console.error("Connection not found");
+      return;
+    }
+    
+    conn.send(message);
+  }
+  
+
+
 }

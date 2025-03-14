@@ -1,21 +1,15 @@
+import { QueueParticipant } from "../../../model/queueParticipant";
 import "./participantQueue.css";
 import { useState, useRef } from "react";
 
-interface Participant {
-  id: number;
-  name: string;
-  comment: string;
-  speaking?: boolean;
-}
-
 interface ParticipantListProps {
-  participants: Participant[];
-  currentParticipant: Participant | null;
+  participants: QueueParticipant[];
+  currentParticipant: QueueParticipant | null;
   onMute: () => void;
   onNext: () => void;
   hasNextParticipant: boolean;
   onReorder: (fromIndex: number, toIndex: number) => void;
-  onDelete: (participantId: number) => void;
+  onDelete: (participantId: string) => void;
 }
 
 const ParticipantList = ({ 

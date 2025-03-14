@@ -7,7 +7,7 @@ import WaitingInLine from "./waitingInLine/WaitingInLine";
 import "./participant.css";
 import Loading from "../miscPages/Loading.tsx";
 import ConnectionErrorPage from "../miscPages/ConnectionError.tsx";
-import ParticipantService from "../../services/participant.ts";
+import ParticipantService from "../../services/participantService.ts";
 
 function ParticipantPage() {
   const userContext = useContext(UserContext);
@@ -84,7 +84,7 @@ function ParticipantPage() {
     setCurrentComponent("waitingInLine");
     setPlaceInLine("loading")
     try {
-      service.sendComment(text);
+      service.sendComment(text, username);
     }
     catch (e) {
       console.error("Failed to load connection", e);
