@@ -28,6 +28,12 @@ class PresenterService {
       connectionError: this.participantError.bind(this),
     };
 
+    // JS State wack, see if this fixes it
+    this.reorderParticipants = this.reorderParticipants.bind(this);
+    this.nextParticipant = this.nextParticipant.bind(this);
+    this.toggleMute = this.toggleMute.bind(this);
+    this.deleteParticipant = this.deleteParticipant.bind(this);
+
     this.presenterConnection = new PresenterConnection(roomId, presenterService);
   }
 

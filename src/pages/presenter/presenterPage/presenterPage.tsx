@@ -68,18 +68,17 @@ const PresenterPage = () => {
             )}
           </div>
 
-          {/* NEED TO BE PASSED AS ARROW FUNCTIONS BECAUSE JS STATE WACK */}
           <div className="participant-column">
-            <ParticipantList
+          <ParticipantList
               participants={participants}
               currentParticipant={currentParticipant}
-              onMute={() => service.toggleMute()}
-              onNext={() => service.nextParticipant()}
+              onMute={service.toggleMute}
+              onNext={service.nextParticipant}
               hasNextParticipant={
                 participants.length > 0 || currentParticipant !== null
               }
-              onReorder={(fromIndex, toIndex) => service.reorderParticipants(fromIndex, toIndex)}
-              onDelete={(participantId) => service.deleteParticipant(participantId)}
+              onReorder={service.reorderParticipants}
+              onDelete={service.deleteParticipant}
             />
           </div>
         </div>
