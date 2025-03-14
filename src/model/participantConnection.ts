@@ -1,7 +1,8 @@
 import { DataConnection } from "peerjs";
 import { Connection } from "./connection";
-import { Message } from "./message";
+import { MessageToPresenter } from "./messageToPresenter.ts";
 import ConnectionError from "../components/connectionError.ts";
+import { MessageToParticipant } from "./messageToParticipant.ts";
 
 export class ParticipantConnection extends Connection {
   private conn: DataConnection;
@@ -37,13 +38,13 @@ export class ParticipantConnection extends Connection {
     });
 
     this.conn.on("data", (body: any) => {
-      const data = body as Message;
+      const data = body as MessageToParticipant;
       console.log(`Received from presenter: ${data}\n`);
       console.log(data);
       if (data.linePos || data.linePos == 0) {
         updateLinePos(data.linePos);
-      } else if (data.comment) {
-        console.log(`Comment: ${data.comment}`);
+      } else if (data.connectionInfo) {
+        console.log(`Comment: ${data.connectionInfo}`);
       }
     });
 
@@ -70,10 +71,10 @@ export class ParticipantConnection extends Connection {
     this.setupConnectionEvents(this.changePos);
   }
 
-  public sendComment(comment: string){
+  public sendComment(comment: MessageToPresenter){
     if (this.conn.open) {
       this.waitBeforeTimeout = 30;
-      this.conn.send({ type: "comment", comment });
+      this.conn.send(comment);
     }
     else {
       console.log("Connection not open");

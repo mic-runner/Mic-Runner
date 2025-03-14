@@ -2,86 +2,54 @@ import { useState, useEffect, useRef } from "react";
 import "./presenterPage.css";
 import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
-import DataService, {
-  Participant,
-  RoomInfo,
-} from "../../../services/dataService";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PresenterConnection } from "../../../model/presenterConnection.ts";
+
+import PresenterService, { IPresenterView } from "../../../services/presenterService.ts";
+import { QueueParticipant } from "../../../model/queueParticipant.ts";
+import { RoomInfo } from "../../../model/roomInfo.ts";
+
 
 const PresenterPage = () => {
-  const [participants, setParticipants] = useState<Participant[]>([]);
   const { state } = useLocation();
-  const [service, setService] = useState<PresenterConnection>();
-  const [currentParticipant, setCurrentParticipant] = useState<Participant | null>(null);
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
+  const [currentParticipant, setCurrentParticipant] = useState<QueueParticipant | null>(null);
+  const [participants, setParticipants] = useState<QueueParticipant[]>([]);
 
   const navigate = useNavigate();
   const initialized = useRef<boolean>(false);
 
-  useEffect(() => {
-    setParticipants(DataService.getParticipants());
+  // CS 340 speaking to me like the green goblin mask
+  const view: IPresenterView = {
+    updateCurrentParticipant: setCurrentParticipant,
+    updateParticipants: setParticipants,
+  };
 
-    if (state) {
-        // Keeping the roomInfo object for centralization of updates
-        const room: RoomInfo = {
-            roomNumber: state.room,
-            joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}/participant?room=${state.room}`,
-        };
-        if (!initialized.current) {
-          initialized.current = true;
-          setService(new PresenterConnection(state.room))
-          service?.sendLinePositions()
-        }
-        setRoomInfo(room);
-    }
-    else {
-        // If the host has no room number navigate to the landing page
-        navigate("/");
-    }
+  const [service] = useState<PresenterService>(new PresenterService(view));
+
+
+  useEffect(() => {
+    if (initialized.current) return;
+    initializeRoom(state);
+    initialized.current = true;
   }, []);
 
-  const nextParticipant = () => {
-    if (participants.length > 0) {
-      setCurrentParticipant({
-        ...participants[0],
-        speaking: true,
-      });
 
-      setParticipants(participants.slice(1));
-    } else {
-      setCurrentParticipant(null);
+  // For some reason state has to be type any?
+  const initializeRoom = (state: any) => {
+    if (!state) {
+      navigate("/");
+      return;
     }
-  };
+    // Keeping the roomInfo object for centralization of updates
+    const room: RoomInfo = {
+        roomNumber: state.room,
+        joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}/participant?room=${state.room}`,
+    };
+    setRoomInfo(room);
 
-  const toggleMute = () => {
-    if (currentParticipant) {
-      setCurrentParticipant({
-        ...currentParticipant,
-        speaking: !currentParticipant.speaking,
-      });
-    }
-  };
+    service.connectPresenter(room.roomNumber);
+  }
 
-  // Handle reordering of participants
-  const handleReorderParticipants = (fromIndex: number, toIndex: number) => {
-    // Create a copy of the participants array
-    const updatedParticipants = [...participants];
-
-    // Remove the dragged item
-    const [draggedItem] = updatedParticipants.splice(fromIndex, 1);
-
-    // Insert it at the new position
-    updatedParticipants.splice(toIndex, 0, draggedItem);
-
-    // Update state with new order
-    setParticipants(updatedParticipants);
-  };
-
-  // Handle deleting a participant
-  const handleDeleteParticipant = (participantId: number) => {
-    setParticipants(participants.filter((p) => p.id !== participantId));
-  };
 
   return (
     <div className="presenter-layout">
@@ -101,16 +69,16 @@ const PresenterPage = () => {
           </div>
 
           <div className="participant-column">
-            <ParticipantList
+          <ParticipantList
               participants={participants}
               currentParticipant={currentParticipant}
-              onMute={toggleMute}
-              onNext={nextParticipant}
+              onMute={service.toggleMute}
+              onNext={service.nextParticipant}
               hasNextParticipant={
                 participants.length > 0 || currentParticipant !== null
               }
-              onReorder={handleReorderParticipants}
-              onDelete={handleDeleteParticipant}
+              onReorder={service.reorderParticipants}
+              onDelete={service.deleteParticipant}
             />
           </div>
         </div>
