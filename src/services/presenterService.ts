@@ -88,7 +88,6 @@ class PresenterService {
 
   public nextParticipant() {
 
-
     // Notify the current participant they've been removed
     if (this.currentParticipant){
       this.notifyParticipantRemoved(this.currentParticipant.id);
@@ -98,14 +97,12 @@ class PresenterService {
 
       // Get the next participant
       const nextParticipant = this.participantQueue.shift()!;
-      this.notifyParticipantOfPosition(nextParticipant.id, 0);
-      
-      // Update the current participant
       this.currentParticipant = { ...nextParticipant, speaking: true };
       this.view.updateCurrentParticipant(this.currentParticipant);
-      this.view.updateParticipants([...this.participantQueue]);
+      this.notifyParticipantOfPosition(nextParticipant.id, -1);
 
-      // Update the positions of remaining participants
+        // Update the positions of remaining participants
+      this.view.updateParticipants([...this.participantQueue]);
       this.updatePositionsAfterIndex(0);
     } else {
       this.currentParticipant = null;
@@ -178,7 +175,7 @@ class PresenterService {
 
   private notifyParticipantOfPosition(participantId: string, position: number) {
     const messageToParticipant: MessageToParticipant = {
-      linePos: position,
+      linePos: position + 1,
     };
     
     this.presenterConnection?.sendMessageToParticipant(participantId, messageToParticipant);
