@@ -1,9 +1,9 @@
 import {useContext, useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import { UserContext } from "../../components/UserContext";
-import TextSubmission from "./textSubmission/TextSubmission";
-import PressToSpeak from "./pressToSpeak/PressToSpeak";
-import WaitingInLine from "./waitingInLine/WaitingInLine";
+import { UserContext } from "../../components/UserContext.tsx";
+import TextSubmission from "./textSubmission/TextSubmission.tsx";
+import PressToSpeak from "./pressToSpeak/PressToSpeak.tsx";
+import WaitingInLine from "./waitingInLine/WaitingInLine.tsx";
 import "./participant.css";
 import Loading from "../miscPages/Loading.tsx";
 import ConnectionErrorPage from "../miscPages/ConnectionError.tsx";
@@ -66,10 +66,8 @@ function ParticipantPage() {
   useEffect(() => {
     if (roomNumber) {
       console.log(`Establishing connection to room: ${roomNumber}`);
-      // TODO:
-      // USER ID MIGHT NEED TO BE UNIQUE AND IT WONT BE AS IT IS NOW!!
       try {
-        service.connectParticipant("", roomNumber, updatePlaceInLine);
+        service.connectParticipant(roomNumber, updatePlaceInLine);
       }
       catch (e) {
         console.error("Failed to load connection", e);

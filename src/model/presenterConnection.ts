@@ -54,6 +54,8 @@ export class PresenterConnection extends Connection {
 
   public deleteConnection(peerId: string) {
     const conn = this.allconnections.get(peerId);
+
+    // TODO do we want to delete the connection?
     if (conn) {
       conn.close();
       this.allconnections.delete(peerId);
