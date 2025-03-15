@@ -3,10 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main # Deploy when main branch is updated
 
 permissions:
-  contents: write
+  contents: write # Required for pushing to gh-pages
 
 jobs:
   build-and-deploy:
@@ -27,6 +27,11 @@ jobs:
 
       - name: Build Project
         run: npm run build
+
+      - name: Configure Git User
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
 
       - name: Deploy to GitHub Pages
         run: npm run deploy
