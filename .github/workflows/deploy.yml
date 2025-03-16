@@ -3,10 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Deploy when main branch is updated
+      - main
 
 permissions:
-  contents: write # Required for pushing to gh-pages
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -34,4 +34,6 @@ jobs:
           git config --global user.name "github-actions"
 
       - name: Deploy to GitHub Pages
-        run: npm run deploy
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/mic-runner/Mic-Runner.git
+          npm run deploy
