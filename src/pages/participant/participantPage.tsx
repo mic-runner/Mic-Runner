@@ -23,22 +23,6 @@ function ParticipantPage() {
   const [params]= useSearchParams();
 
 
-
-
-  //////////DELETE LATER!! THIS IS JUST TO SIMULATE WAITING IN LINE///////////////////// 
-
-  // if (currentComponent === "waitingInLine" && Number(placeInLine) > 0) {
-  //   setTimeout(() => {
-  //     setPlaceInLine(() => String(Math.max(0, Number(placeInLine) - 1)));
-  //   }, 1000);
-  // }
-
-  // when you delete this, you might have to change the next if statement to not make it into a number first when comparing and just compare it to a string 0. 
-  // you can also get rid of the setPlaceInLine from the userContext when you delete this
-
-  // sorry for the hassle! 
-  ///////////////////////////////////////////////////////////////////////////////////// 
-
   const updatePlaceInLine = (i: number) => {
     setPlaceInLine(i.toString());
   }

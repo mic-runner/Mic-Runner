@@ -21,8 +21,7 @@ interface UserProviderProps {
 export function UserProvider({ children }: UserProviderProps) {
   const [username, setUsername] = useState<string>("");
   const [roomNumber, setRoomNumber] = useState<string>("");
-  const [placeInLine, setPlaceInLine] = useState<string>("10"); // thi is hardcoded to 10 for now
-
+  const [placeInLine, setPlaceInLine] = useState<string>("");
   return (
     <UserContext.Provider
       value={{
