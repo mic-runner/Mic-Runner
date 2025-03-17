@@ -12,58 +12,74 @@ export interface IPresenterService {
 }
 
 
-
 export class PresenterConnection extends Connection {
 
   private presenterService: IPresenterService;
 
-  private allconnections: Map<string, DataConnection> = new Map();
+  private participantConnections: Map<string, DataConnection> = new Map();
 
   constructor(roomId: string, presenterService: IPresenterService) {
     super(roomId);
     this.presenterService = presenterService;
 
-    this.setupPeerEvents();
+    this.setUpOwnConnectionEvents();
   }
 
-  private setupPeerEvents() {
-    this.peer.on("connection", (conn) => {
+  // SET UP EVENTS INVOLVING OUR OWN CONNECTION, SETTING UP PRESENTER
+  private setUpOwnConnectionEvents() {
 
-      conn.on("open", () => {
-        this.presenterService.connectionOpened(conn);
+    this.ownConn.on('open', (myPeerId) => {
+      console.log(`My peer ID is ${myPeerId}.`);
+      this.setupParticipantConnectionEvents();
+    });
+  }
+
+  // SET UP EVENTS INVOLVING INCOMING PARTICIPANT CONNECTIONS
+  private setupParticipantConnectionEvents() {
+
+    // When a participant connects
+    this.ownConn.on("connection", (participantConn) => {
+      console.log("START OF CONNECTION", participantConn.peer);
+
+      // Connection with participant established
+      participantConn.on("open", () => {
+        this.presenterService.connectionOpened(participantConn);
       });
 
-      conn.on("data", (body: any) => {
-        this.presenterService.messageReceived(conn.peer, body as MessageToPresenter);
+      // Received data from participant
+      participantConn.on("data", (body: any) => {
+        this.presenterService.messageReceived(participantConn.peer, body as MessageToPresenter);
       });
 
-      conn.on("close", () => {
-        this.presenterService.connectionClosed(conn.peer);
+      // Participant connection closed
+      participantConn.on("close", () => {
+        this.presenterService.connectionClosed(participantConn.peer);
       });
 
-      conn.on("error", (err) => {
-        this.presenterService.connectionError(conn.peer, err);
+      // Error with participant connection
+      participantConn.on("error", (err) => {
+        this.presenterService.connectionError(participantConn.peer, err);
       });
     });
   }
 
 
   public addConnection(conn: DataConnection) {
-    this.allconnections.set(conn.peer, conn);
+    this.participantConnections.set(conn.peer, conn);
   }
 
   public deleteConnection(peerId: string) {
-    const conn = this.allconnections.get(peerId);
+    const conn = this.participantConnections.get(peerId);
 
     // TODO do we want to delete the connection?
     if (conn) {
       conn.close();
-      this.allconnections.delete(peerId);
+      this.participantConnections.delete(peerId);
     }
   }
 
   public sendMessageToParticipant(peerId: string, message: MessageToParticipant) {
-    const conn = this.allconnections.get(peerId);
+    const conn = this.participantConnections.get(peerId);
     if (!conn) {
       console.error("Connection not found");
       return;

@@ -1,94 +1,90 @@
 import { DataConnection } from "peerjs";
 import { Connection } from "./connection";
 import { MessageToPresenter } from "./messageToPresenter.ts";
-import ConnectionError from "../components/connectionError.ts";
 import { MessageToParticipant } from "./messageToParticipant.ts";
 
 export class ParticipantConnection extends Connection {
-  private conn: DataConnection;
-  private peerID: string;
+  private presenterConn: DataConnection = null!;
+  private roomId: string;
   private changePos: (i: number) => void;
-  private waitBeforeTimeout: number = 30; // Number in seconds
-  private waitTime = 5000; // Number in milliseconds
+  private queuedMessages: MessageToPresenter[] = [];
 
   constructor(userId: string, roomId: string, changeLinePos: (i: number) => void) {
     super(userId);
-    this.peerID = roomId;
-    this.peer.on('error', (err) => {
-      console.error("Connection error", err);
-      console.error("Trying to connect");
-      if (this.waitBeforeTimeout > 0) {
-        this.waitBeforeTimeout -= this.waitTime / 1000;
-        this.conn = this.peer.connect(this.peerID);
-      }
-      else {
-        console.error("Failed to connect", err);
-        throw new ConnectionError("Failed to connect");
-      }
-    })
-    this.conn = this.peer.connect(roomId);
-    console.log("Connected to ", this.conn.peer);
-    this.setupConnectionEvents(changeLinePos);
     this.changePos = changeLinePos;
+    this.roomId = roomId;
+
+    this.setUpOwnConnectionEvents();
   }
 
-  private setupConnectionEvents(updateLinePos: (i: number) => void) {
-    this.conn.on("open", () => {
-      console.log("Connection with presenter opened", this.conn.peer);
+  // SET UP EVENTS INVOLVING OUR OWN CONNECTION, SETTING UP PARTICIPANT
+  private setUpOwnConnectionEvents() {
+
+    // Own connection established
+    this.ownConn.on('open', (myPeerId) => {
+      console.log(`My peer ID is ${myPeerId}. Now connecting to ${this.roomId}`);
+
+      this.presenterConn = this.ownConn.connect(this.roomId);
+      this.setupPresenterConnectionEvents();
     });
 
-    this.conn.on("data", (body: any) => {
-      const data = body as MessageToParticipant;
-      console.log(`Received from presenter: ${data}\n`);
-      console.log(data);
-      if (data.linePos || data.linePos == 0) {
-        updateLinePos(data.linePos);
-      } else if (data.connectionInfo) {
-        console.log(`Comment: ${data.connectionInfo}`);
+    // Own connection closed
+    this.ownConn.on('close', () => {
+      console.log("Peer closed");
+    });
+
+     // Error with own connection
+     this.ownConn.on('error', (err) => {
+      console.error("Peer error:", err);
+    });
+
+  }
+
+   // SET UP EVENTS INVOLVING CONNECTION WITH PRESENTER
+  private setupPresenterConnectionEvents() {
+
+    // Connection with presenter established
+    this.presenterConn.on("open", () => {
+      console.log("Data connection opened with presenter.");
+
+      while (this.queuedMessages.length > 0) {
+        const msg = this.queuedMessages.shift();
+        if (msg) this.presenterConn.send(msg);
       }
     });
 
-    this.conn.on("error", (err) => {
-      console.error("Connection error", err);
+    // Received data from presenter
+    this.presenterConn.on("data", (body: any) => {
+      const data = body as MessageToParticipant;
+      console.log(`Received from presenter:`, data);
+
+      if (data.linePos !== undefined && data.linePos !== null) {
+        this.changePos(data.linePos);
+      } else if (data.connectionInfo) {
+        console.log(`Info from presenter: ${data.connectionInfo}`);
+      }
     });
 
-    this.peer.on('open', () => {
-      console.log("Peer opened");
-    })
+    // Connection with presenter closed
+    this.presenterConn.on("close", () => {
+      console.warn("Data connection closed.");
+    });
 
-    this.peer.on('close', () => {
-      console.log("Peer closed");
-    })
+    // Error with connection to presenter
+    // - error / retry handling can be added here if needed
+    this.presenterConn.on("error", (err) => {
+      console.error("Data connection error:", err);
+    });
 
-    this.peer.on('error', (err) => {
-      console.error("Connection error", err);
-    })
-  }
-
-  private reconnect() {
-    this.conn = this.peer.connect(this.peerID);
-    console.log("Connected to ", this.conn.peer);
-    this.setupConnectionEvents(this.changePos);
   }
 
   public sendComment(comment: MessageToPresenter){
-    if (this.conn.open) {
-      this.waitBeforeTimeout = 30;
-      this.conn.send(comment);
-    }
-    else {
-      console.log("Connection not open");
-      this.reconnect()
-      if (this.waitBeforeTimeout > 0) {
-        setTimeout(() => {
-          this.waitBeforeTimeout -= this.waitTime / 1000;
-          this.sendComment(comment);
-        }, this.waitTime);
-      }
-      else {
-        console.error(`Failed to connect timeout: ${this.waitBeforeTimeout}; time between attempts (ms): ${this.waitTime}`);
-        throw new ConnectionError("Failed to reconnect");
-      }
+    if (this.presenterConn && this.presenterConn.open) {
+      console.log("Sending data immediately");
+      this.presenterConn.send(comment);
+    } else {
+      console.log("Connection not yet open; queuing message");
+      this.queuedMessages.push(comment);
     }
   }
 }

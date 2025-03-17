@@ -1,7 +1,7 @@
 import Peer from "peerjs";
 
 export abstract class Connection {
-  protected peer: Peer;
+  protected ownConn: Peer;
 
   private iceConfig = {
     iceServers: [
@@ -16,13 +16,13 @@ export abstract class Connection {
 
   constructor(peerId: string) {
     if (!peerId) {
-      this.peer = new Peer({
+      this.ownConn = new Peer({
         config: this.iceConfig,
         debug: 3,
       })
     }
     else {
-      this.peer = new Peer(peerId, {
+      this.ownConn = new Peer(peerId, {
         config: this.iceConfig,
         debug: 3,
       });
