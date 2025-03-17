@@ -1,21 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta http-equiv="refresh" content="0; URL=/" />
     <script type="text/javascript">
-      var redirectTo =
-        window.location.pathname +
-        window.location.search +
-        window.location.hash;
-      window.location.href = "/" + redirectTo;
+      window.location.href = "/";
     </script>
   </head>
   <body>
     <p>
-      If you are not redirected automatically, follow this
-      <a id="redirect-link" href="#">link</a>.
+      If you are not redirected automatically, follow this <a href="/">link</a>.
     </p>
-    <script type="text/javascript">
-      document.getElementById("redirect-link").href = "/" + redirectTo;
-    </script>
   </body>
 </html>
