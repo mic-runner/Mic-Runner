@@ -57,9 +57,9 @@ const PressToSpeak = () => {
         onMouseLeave={handleEnd}
       >
         {isSpeaking ? 
-          <img src="/mic.png" alt="Microphone" />
+          <img src="https://mic-runner.github.io/Mic-Runner/mic.png" alt="Microphone" />
           :
-          <img src="/tap.png" alt="Tap" />
+          <img src="https://mic-runner.github.io/Mic-Runner/tap.png" alt="Tap" />
         }
       </div>
 
