@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import { LinePositionValues } from "../utils/sharedConsts";
 
 interface UserContextType {
   username: string;
