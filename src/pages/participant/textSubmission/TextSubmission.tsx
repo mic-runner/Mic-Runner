@@ -18,7 +18,8 @@ const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
+    // I am not a big fan of this alert, but it can be uncommented if desired
+    // alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
     setText("");
     props.onSubmitText(text); 
   };

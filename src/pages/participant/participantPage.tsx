@@ -7,7 +7,8 @@ import WaitingInLine from "./waitingInLine/WaitingInLine.tsx";
 import "./participantPage.css";
 import Loading from "../miscPages/Loading.tsx";
 import ConnectionErrorPage from "../miscPages/ConnectionError.tsx";
-import ParticipantService from "../../services/participantService.ts";
+import ParticipantService, { IParticipantView } from "../../services/participantService.ts";
+import { LinePositionValues } from "../../utils/sharedConsts.ts";
 
 function ParticipantPage() {
   const userContext = useContext(UserContext);
@@ -16,20 +17,20 @@ function ParticipantPage() {
     throw new Error("ParticipantPage must be used within a UserProvider");
   }
 
-  const { username, roomNumber, placeInLine, setPlaceInLine, setRoomNumber} = userContext;
-  const [service] = useState(new ParticipantService())
-  const [currentComponent, setCurrentComponent] = useState("textSubmission");
+  const { username, roomNumber, setRoomNumber } = userContext;
+  const [placeInLine, setPlaceInLine] = useState<number>(LinePositionValues.NOT_IN_LINE);
+  const [hasConnectionError, setHasConnectionError] = useState<boolean>(false);
   const navigate = useNavigate(); 
-  const [params]= useSearchParams();
+  const [params] = useSearchParams();
 
+  const view: IParticipantView = {
+    updatePlaceInLine: setPlaceInLine,
+  };
 
-  const updatePlaceInLine = (i: number) => {
-    setPlaceInLine(i.toString());
-  }
+  const [service] = useState(new ParticipantService(view));
 
-
+  // Handle URL room parameter
   useEffect(() => {
-    // The format of a URL with a room value is https://micrunner.click/participant?room=#
     const roomFromURL = params.get("room");
 
     if (roomFromURL) {
@@ -43,47 +44,77 @@ function ParticipantPage() {
     }
   }, [params, roomNumber, setRoomNumber, navigate]);
 
-
-
-  
   // Handle connection establishment once roomNumber is set
   useEffect(() => {
     if (roomNumber) {
       console.log(`Establishing connection to room: ${roomNumber}`);
       try {
-        service.connectParticipant(roomNumber, updatePlaceInLine);
-      }
-      catch (e) {
+        service.connectParticipant(roomNumber);
+      } catch (e) {
         console.error("Failed to load connection", e);
         navigate("/");
       }
     } else {
       console.error("Room number not set, cannot establish connection.");
     }
-  }, [roomNumber]); 
+  }, [roomNumber, service, navigate]);
 
   const handleSubmitText = (text: string) => {
-    setCurrentComponent("waitingInLine");
-    setPlaceInLine("loading")
     try {
+      setPlaceInLine(LinePositionValues.LOADING);
       service.sendComment(text, username);
-    }
-    catch (e) {
-      console.error("Failed to load connection", e);
-      setCurrentComponent("connectionError");
+    } catch (e) {
+      console.error("Failed to send comment", e);
+      setHasConnectionError(true);
     }
   };
 
-  if (Number(placeInLine) === 0 && currentComponent === "waitingInLine") {
-    setCurrentComponent("pressToSpeak");
-  }
-
   const handleBack = () => {
-    if (currentComponent === "textSubmission") {
-      navigate("/"); 
-    } else if (currentComponent === "waitingInLine" || currentComponent === "pressToSpeak") {
-      setCurrentComponent("textSubmission");
+    if (placeInLine === LinePositionValues.NOT_IN_LINE) {
+      service.disconnectFromPresenter();
+      navigate("/");
     } 
+    else {
+      service.removeFromQueue();
+      setPlaceInLine(LinePositionValues.NOT_IN_LINE);
+    }
+  };
+
+  // Render the appropriate component based on placeInLine
+  const renderContent = () => {
+    
+    if (hasConnectionError) {
+      return <ConnectionErrorPage />;
+    }
+    
+    if (placeInLine === LinePositionValues.NOT_IN_LINE) {
+      return (
+        <TextSubmission
+          textboxPlaceholder="I have a question about..."
+          buttonPlaceholder="Get in line"
+          textSubmissionHeader="Comment Topic"
+          onSubmitText={handleSubmitText}
+        />
+      );
+    }
+    
+    // User is loading into the queue
+    if (placeInLine === LinePositionValues.LOADING) {
+      return <Loading roomNumber={roomNumber} />;
+    }
+    
+    // User is the current speaker
+    if (placeInLine === LinePositionValues.CURRENT_SPEAKER) {
+      return <PressToSpeak />;
+    }
+    
+    // Default: user is in line but not the current speaker
+    return <WaitingInLine placeInLine={placeInLine} />;
+  };
+
+  // Determine button text based on state
+  const getBackButtonText = () => {
+    return placeInLine === LinePositionValues.NOT_IN_LINE ? "Back" : "Leave Line";
   };
 
   return (
@@ -94,29 +125,14 @@ function ParticipantPage() {
       </div>
 
       <div id="participant-center">
-        {currentComponent === "textSubmission" && (
-          <TextSubmission
-            textboxPlaceholder="I have a question about..."
-            buttonPlaceholder="Get in line"
-            textSubmissionHeader="Comment Topic"
-            onSubmitText={handleSubmitText}
-          />
-        )}
-        {currentComponent === "waitingInLine" && placeInLine === "loading" && (
-            <Loading roomNumber={roomNumber} />
-        )}
-        {currentComponent === "waitingInLine" && placeInLine !== "loading" && (
-          <WaitingInLine placeInLine={placeInLine.toString()} />
-        )}
-        {currentComponent === "pressToSpeak" && <PressToSpeak />}
-        {currentComponent === "connectionError" && <ConnectionErrorPage />}
+        {renderContent()}
       </div>
 
       <div id="participant-footer">
         <h3 id="participant-room">Room {roomNumber}</h3>
         <button onClick={handleBack} className="back-button styled-button">
-        {currentComponent === "textSubmission" ? "Back" : "Leave Line"}
-      </button>
+          {getBackButtonText()}
+        </button>
       </div>
     </div>
   );

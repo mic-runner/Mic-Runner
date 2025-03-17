@@ -1,12 +1,11 @@
 import React, { createContext, useState } from "react";
+import { LinePositionValues } from "../utils/sharedConsts";
 
 interface UserContextType {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   roomNumber: string;
   setRoomNumber: React.Dispatch<React.SetStateAction<string>>;
-  placeInLine: string;
-  setPlaceInLine: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // creating context here
@@ -21,7 +20,6 @@ interface UserProviderProps {
 export function UserProvider({ children }: UserProviderProps) {
   const [username, setUsername] = useState<string>("");
   const [roomNumber, setRoomNumber] = useState<string>("");
-  const [placeInLine, setPlaceInLine] = useState<string>("");
   return (
     <UserContext.Provider
       value={{
@@ -29,8 +27,6 @@ export function UserProvider({ children }: UserProviderProps) {
         setUsername,
         roomNumber,
         setRoomNumber,
-        placeInLine,
-        setPlaceInLine,
       }}
     >
       {children}

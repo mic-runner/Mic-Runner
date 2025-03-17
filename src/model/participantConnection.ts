@@ -3,16 +3,21 @@ import { Connection } from "./connection";
 import { MessageToPresenter } from "./messageToPresenter.ts";
 import { MessageToParticipant } from "./messageToParticipant.ts";
 
+
+export interface IParticipantService {
+  messageReceived: (message: MessageToParticipant) => void;
+}
+
 export class ParticipantConnection extends Connection {
+  private participantService: IParticipantService;
   private presenterConn: DataConnection = null!;
   private roomId: string;
-  private changePos: (i: number) => void;
   private queuedMessages: MessageToPresenter[] = [];
 
-  constructor(userId: string, roomId: string, changeLinePos: (i: number) => void) {
+  constructor(userId: string, roomId: string, participantService: IParticipantService) {
     super(userId);
-    this.changePos = changeLinePos;
     this.roomId = roomId;
+    this.participantService = participantService;
 
     this.setUpOwnConnectionEvents();
   }
@@ -55,14 +60,8 @@ export class ParticipantConnection extends Connection {
 
     // Received data from presenter
     this.presenterConn.on("data", (body: any) => {
-      const data = body as MessageToParticipant;
-      console.log(`Received from presenter:`, data);
-
-      if (data.linePos !== undefined && data.linePos !== null) {
-        this.changePos(data.linePos);
-      } else if (data.connectionInfo) {
-        console.log(`Info from presenter: ${data.connectionInfo}`);
-      }
+      console.log(`Received from presenter:`, body);
+      this.participantService.messageReceived(body as MessageToParticipant);
     });
 
     // Connection with presenter closed
@@ -78,7 +77,7 @@ export class ParticipantConnection extends Connection {
 
   }
 
-  public sendComment(comment: MessageToPresenter){
+  public sendMessage(comment: MessageToPresenter) {
     if (this.presenterConn && this.presenterConn.open) {
       console.log("Sending data immediately");
       this.presenterConn.send(comment);
@@ -87,4 +86,9 @@ export class ParticipantConnection extends Connection {
       this.queuedMessages.push(comment);
     }
   }
+
+  public closeConnection() {
+    this.presenterConn.close();
+  }
+
 }

@@ -15,7 +15,6 @@ export interface IPresenterService {
 export class PresenterConnection extends Connection {
 
   private presenterService: IPresenterService;
-
   private participantConnections: Map<string, DataConnection> = new Map();
 
   constructor(roomId: string, presenterService: IPresenterService) {

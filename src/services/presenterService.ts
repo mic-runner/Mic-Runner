@@ -3,6 +3,7 @@ import { IPresenterService, PresenterConnection } from "../model/presenterConnec
 import { DataConnection } from "peerjs";
 import { MessageToPresenter } from "../model/messageToPresenter";
 import { MessageToParticipant } from "../model/messageToParticipant";
+import { LinePositionValues } from '../utils/sharedConsts';
 
 export interface IPresenterView {
   updateCurrentParticipant: (currentParticipant: QueueParticipant | null) => void;
@@ -18,24 +19,35 @@ class PresenterService {
 
   constructor(view: IPresenterView) {
     this.view = view;
+
+    this.bindCallBackMethods();
   }
 
-  public connectPresenter(roomId: string) {
-    const presenterService: IPresenterService = {
-      connectionOpened: this.participantJoined.bind(this),
-      messageReceived: this.participantMessage.bind(this),
-      connectionClosed: this.participantLeft.bind(this),
-      connectionError: this.participantError.bind(this),
-    };
-
-    // JS State wack, see if this fixes it
+  // Any methods that use 'this' and are used in callbacks must have the this context bound in constructor
+  // Js is so wack man
+  private bindCallBackMethods() {
+    this.participantJoined = this.participantJoined.bind(this);
+    this.participantMessage = this.participantMessage.bind(this);
+    this.participantLeft = this.participantLeft.bind(this);
+    this.participantError = this.participantError.bind(this);
     this.reorderParticipants = this.reorderParticipants.bind(this);
     this.nextParticipant = this.nextParticipant.bind(this);
     this.toggleMute = this.toggleMute.bind(this);
     this.deleteParticipant = this.deleteParticipant.bind(this);
+  }
+
+
+  public connectPresenter(roomId: string) {
+    const presenterService: IPresenterService = {
+      connectionOpened: this.participantJoined,
+      messageReceived: this.participantMessage,
+      connectionClosed: this.participantLeft,
+      connectionError: this.participantError,
+    };
 
     this.presenterConnection = new PresenterConnection(roomId, presenterService);
   }
+
 
 
   // ------ CONNECTION METHODS -------
@@ -45,34 +57,45 @@ class PresenterService {
     this.presenterConnection?.addConnection(conn);
   }
 
-  public participantMessage(peerId: string, message: MessageToPresenter) {
-    console.log(`Received from participant: ${peerId}, message: ${message}`);
+  public participantMessage(participantId: string, message: MessageToPresenter) {
+    console.log(`Received from participant: ${participantId}, message: ${message}`);
 
-    const participant: QueueParticipant = {
-      id: peerId,
-      name: message.username,
-      comment: message.comment,
-      speaking: false,
+    if (message.removeFromQueue) {
+      this.participantLeft(participantId);
+    }
+    else {
+      this.addToQueue(participantId, message);
+    }
+  }
+
+  private addToQueue(participantId: string, message: MessageToPresenter)
+  {
+      const participant: QueueParticipant = {
+        id: participantId,
+        name: message.username!,
+        comment: message.comment!,
+        speaking: false,
     };
 
     this.participantQueue.push(participant);
     this.view.updateParticipants([...this.participantQueue]);
 
     // Notify the participant of their position in the queue
-    this.notifyParticipantOfPosition(peerId, this.participantQueue.length - 1);
+    this.notifyParticipantOfPosition(participantId, this.participantQueue.length - 1);
   }
 
-  public participantLeft(peerId: string) {
-    console.log(`Participant ${peerId} disconnected`);
+
+
+  public participantLeft(participantId: string) {
 
     // Get the index of the participant before removing them
-    const participantIndex = this.participantQueue.findIndex(p => p.id === peerId);
+    const participantIndex = this.participantQueue.findIndex(p => p.id === participantId);
 
     // Remove participant from list
-    this.participantQueue = this.participantQueue.filter(p => p.id !== peerId);
+    this.participantQueue = this.participantQueue.filter(p => p.id !== participantId);
 
     // Also clear current if they were speaking
-    if (this.currentParticipant?.id === peerId) {
+    if (this.currentParticipant?.id === participantId) {
       this.currentParticipant = null;
       this.view.updateCurrentParticipant(null);
     }
@@ -85,9 +108,12 @@ class PresenterService {
     }
   }
 
-  public participantError(peerId: string, err: any) {
-    console.error(`Connection error with participant ${peerId}, error: ${err}`);
+
+  public participantError(participantId: string, err: any) {
+    console.error(`Connection error with participant ${participantId}, error: ${err}`);
   }
+
+
 
 
   // ------ QUEUE METHODS -------
@@ -153,21 +179,11 @@ class PresenterService {
   }
 
   public deleteParticipant(participantId: string) {
-    // Find the participant's index before removing
-    const participantIndex = this.participantQueue.findIndex(p => p.id === participantId);
-    
-    if (participantIndex !== -1) {
-      // Notify the participant they've been removed
-      this.notifyParticipantRemoved(participantId);
-      
-      // Remove the participant
-      this.participantQueue = this.participantQueue.filter(p => p.id !== participantId);
-      this.view.updateParticipants([...this.participantQueue]);
-      
-      // Update positions for participants after the removed one
-      this.updatePositionsAfterIndex(participantIndex);
-    }
+    this.participantLeft(participantId);
+    this.notifyParticipantRemoved(participantId);
   }
+
+
 
   // ------ HELPER METHODS -------
 
@@ -189,7 +205,7 @@ class PresenterService {
 
   private notifyParticipantRemoved(participantId: string) {
     const messageToParticipant: MessageToParticipant = {
-      connectionInfo: "You have been removed from the queue."
+      linePos: LinePositionValues.NOT_IN_LINE,
     };
     
     this.presenterConnection?.sendMessageToParticipant(participantId, messageToParticipant);
