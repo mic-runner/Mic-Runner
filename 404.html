@@ -5,25 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirecting...</title>
     <script>
-      var path =
+      var redirectPath =
         window.location.pathname +
         window.location.search +
         window.location.hash;
 
       if (!window.location.href.includes("index.html")) {
-        window.location.replace("/Mic-Runner/index.html" + path);
+        window.location.replace("/Mic-Runner/index.html" + redirectPath);
       }
     </script>
   </head>
   <body>
     <p>
-      If you are not redirected, <a id="redirect-link" href="/">click here</a>.
+      If you are not redirected, <a id="redirect-link" href="#">click here</a>.
     </p>
     <script>
       document.getElementById("redirect-link").href =
         "/Mic-Runner/index.html" +
         window.location.pathname +
-        window.location.search;
+        window.location.search +
+        window.location.hash;
     </script>
   </body>
 </html>
