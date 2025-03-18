@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redirecting...</title>
+  <script>
+    var redirectPath =
+            window.location.pathname +
+            window.location.search +
+            window.location.hash;
+    url = new URL(window.location.href);
+
+    params = {}
+    url.searchParams.forEach((value, key) => {
+      params[key] = value
+    })
+    console.log(url);
+    console.log(window.location);
+    console.log(redirectPath);
+
+    obj = {
+      path:  window.location.pathname,
+      searches: params
+    }
+
+
+    buildRedirect = "?redirect=" + JSON.stringify(obj);
+
+    console.log(buildRedirect)
+
+    newURL = new URL(window.location.origin + buildRedirect);
+    console.log(newURL)
+
+    console.log(newURL.searchParams.toString())
+    console.log(decodeURIComponent(newURL.searchParams.get("redirect")))
+    decoded = JSON.parse(decodeURIComponent(newURL.searchParams.get("redirect")))
+
+
+    console.log(decoded)
+
+    if (!window.location.href.includes("index.html")) {
+      window.location.replace("/Mic-Runner" + buildRedirect);
+    }
+
+  </script>
+</head>
+<body>
+<p>
+  If you are not redirected, <a id="redirect-link" href="#">click here</a>.
+</p>
+<script>
+  document.getElementById("redirect-link").href =
+          "/Mic-Runner/index.html" +
+          window.location.pathname +
+          window.location.search +
+          window.location.hash;
+</script>
+</body>
+</html>
