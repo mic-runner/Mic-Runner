@@ -7,8 +7,6 @@ function WelcomePage() {
       <div id="participant-header">
         <h2 id="participant-title">
           <div>
-            Welcome to
-            <br />
             Mic Runner
           </div>
         </h2>

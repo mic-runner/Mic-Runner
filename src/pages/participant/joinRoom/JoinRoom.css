@@ -7,7 +7,7 @@
   flex-direction: column;
   gap: 10px;
   width: 80vw;
-  padding: 10px;
+  max-width: 350px;
   border-radius: 10px;
   background-color: black;
   max-height: 50vh;
