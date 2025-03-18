@@ -70,7 +70,6 @@ export class PresenterConnection extends Connection {
   public deleteConnection(peerId: string) {
     const conn = this.participantConnections.get(peerId);
 
-    // TODO do we want to delete the connection?
     if (conn) {
       conn.close();
       this.participantConnections.delete(peerId);

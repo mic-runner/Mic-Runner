@@ -85,8 +85,14 @@ class PresenterService {
   }
 
 
-
   public participantLeft(participantId: string) {
+
+    this.removeParticipant(participantId);
+    this.presenterConnection?.deleteConnection(participantId);
+  }
+
+
+  public removeParticipant(participantId: string) {
 
     // Get the index of the participant before removing them
     const participantIndex = this.participantQueue.findIndex(p => p.id === participantId);
@@ -179,7 +185,7 @@ class PresenterService {
   }
 
   public deleteParticipant(participantId: string) {
-    this.participantLeft(participantId);
+    this.removeParticipant(participantId);
     this.notifyParticipantRemoved(participantId);
   }
 
