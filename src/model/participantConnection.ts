@@ -107,13 +107,14 @@ export class ParticipantConnection extends Connection {
 
   public sendAudio(stream: MediaStream | null) {
     if (stream) {
-      // If the call doesn't exist, create one and start sending the stream
+    
       if (!this.call) {
+        console.log("Make call yay");
         this.call = this.ownConn.call(this.roomId, stream);
-  
+
         this.call.on("close", () => {
           console.log("Call ended.");
-          this.call = null; // Allow for a new call to be made later
+          this.call = null;
         });
   
         this.call.on("error", (err) => {

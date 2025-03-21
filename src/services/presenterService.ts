@@ -123,6 +123,7 @@ class PresenterService {
   }
 
   public handleCallStream(remoteStream: MediaStream) {
+    console.log("CALL STREAM IN DA SERVICE");
     this.currentParticipant.setAudio(remoteStream);
     this.updateCurrentParticipantForFrontend(this.currentParticipant);
   }

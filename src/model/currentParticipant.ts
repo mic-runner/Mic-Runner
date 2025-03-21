@@ -32,6 +32,15 @@ export class CurrentParticipant {
       return;
     }
 
+    this.playAudio();
+  }
+
+  public setAudio(stream: MediaStream) {
+    this.daAudio.srcObject = stream;
+    this.playAudio();
+  }
+
+  private playAudio() {
     if (this.muted) {
       this.daAudio.pause();
     } else {
@@ -39,9 +48,6 @@ export class CurrentParticipant {
     }
   }
 
-  public setAudio(stream: MediaStream) {
-    this.daAudio.srcObject = stream;
-  }
 
   private resetAudio() {
     this.daAudio.pause();
