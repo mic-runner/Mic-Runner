@@ -4,6 +4,7 @@ import { ParticipantConnection } from "../model/participantConnection";
 
 export interface IParticipantView {
   updatePlaceInLine: (lineNum: number) => void;
+  updateMuted: (isMuted: boolean) => void;
 }
 
 class ParticipantService {
@@ -18,6 +19,7 @@ class ParticipantService {
 
   private bindCallBackMethods() {
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
+    this.sendAudio = this.sendAudio.bind(this);
   }
 
 
@@ -46,12 +48,17 @@ class ParticipantService {
     this.conn?.sendMessage(message);
   }
 
+  public sendAudio(stream: MediaStream | null) {
+    this.conn?.sendAudio(stream);
+  }
+
   public handleReceivedMessage(message: MessageToParticipant) {
     if (message.linePos !== undefined && message.linePos !== null) {
       this.view.updatePlaceInLine(message.linePos);
+    } else if (message.muted !== undefined && message.muted !== null) {
+      this.view.updateMuted(message.muted);
     }
   }
-
 
   public disconnectFromPresenter() {
     this.conn?.closeConnection();

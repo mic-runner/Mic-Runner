@@ -1,10 +1,11 @@
+import { CurrentParticipant } from "../../../model/currentParticipant";
 import { QueueParticipant } from "../../../model/queueParticipant";
 import "./participantQueue.css";
 import { useState, useRef } from "react";
 
 interface ParticipantListProps {
   participants: QueueParticipant[];
-  currentParticipant: QueueParticipant | null;
+  currentParticipant: CurrentParticipant;
   onMute: () => void;
   onNext: () => void;
   hasNextParticipant: boolean;
@@ -77,9 +78,9 @@ const ParticipantList = ({
           <button 
             className="control-button mute-button"
             onClick={onMute}
-            disabled={!currentParticipant}
+            disabled={currentParticipant.participant == null}
           >
-            {currentParticipant && currentParticipant.speaking ? "Mute" : "Unmute"}
+            {currentParticipant.participant && currentParticipant.muted ? "Unmute" : "Mute"}
           </button>
           <button 
             className="control-button next-button"
@@ -92,25 +93,25 @@ const ParticipantList = ({
       </div>
       
       {/* Current Speaker - Fixed outside of the scrollable area */}
-      {currentParticipant && (
+      {currentParticipant.participant && (
         <div className="current-speaker-wrapper">
           <div className="participant-item active">
             <div className="participant-status">
               <div className="mic-icon">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 1C10.3431 1 9 2.34315 9 4V12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12V4C15 2.34315 13.6569 1 12 1Z" fill={currentParticipant.speaking ? "#E68888" : "#777777"}/>
-                  <path d="M7 12C7 12 7 14 12 14C17 14 17 12 17 12" stroke={currentParticipant.speaking ? "#E68888" : "#777777"} strokeWidth="2"/>
-                  <path d="M12 17V20" stroke={currentParticipant.speaking ? "#E68888" : "#777777"} strokeWidth="2"/>
-                  <path d="M8 20H16" stroke={currentParticipant.speaking ? "#E68888" : "#777777"} strokeWidth="2"/>
+                  <path d="M12 1C10.3431 1 9 2.34315 9 4V12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12V4C15 2.34315 13.6569 1 12 1Z" fill={currentParticipant.muted ? "#777777" : "#E68888"}/>
+                  <path d="M7 12C7 12 7 14 12 14C17 14 17 12 17 12" stroke={currentParticipant.muted ? "#777777" : "#E68888"} strokeWidth="2"/>
+                  <path d="M12 17V20" stroke={currentParticipant.muted ? "#777777" : "#E68888"} strokeWidth="2"/>
+                  <path d="M8 20H16" stroke={currentParticipant.muted ? "#777777" : "#E68888"} strokeWidth="2"/>
                 </svg>
               </div>
               <span className="speaking-status">
-                {currentParticipant.speaking ? "Speaking" : "Muted"}
+                {currentParticipant.muted ? "Muted" : "Speaking"}
               </span>
             </div>
-            <div className="participant-name">{currentParticipant.name}</div>
-            {currentParticipant.comment && (
-              <div className="participant-comment">{currentParticipant.comment}</div>
+            <div className="participant-name">{currentParticipant.participant.name}</div>
+            {currentParticipant.participant.comment && (
+              <div className="participant-comment">{currentParticipant.participant.comment}</div>
             )}
           </div>
         </div>
@@ -160,7 +161,7 @@ const ParticipantList = ({
                 </div>
               </div>
             ))
-          ) : !currentParticipant && (
+          ) : !currentParticipant.participant && (
             <div className="no-participants">No participants in queue</div>
           )}
         </div>

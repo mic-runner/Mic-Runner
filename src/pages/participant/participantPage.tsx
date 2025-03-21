@@ -20,11 +20,13 @@ function ParticipantPage() {
   const { username, roomNumber, setRoomNumber } = userContext;
   const [placeInLine, setPlaceInLine] = useState<number>(LinePositionValues.NOT_IN_LINE);
   const [hasConnectionError, setHasConnectionError] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
   const navigate = useNavigate(); 
   const [params] = useSearchParams();
 
   const view: IParticipantView = {
     updatePlaceInLine: setPlaceInLine,
+    updateMuted: setIsMuted,
   };
 
   const [service] = useState(new ParticipantService(view));
@@ -42,7 +44,7 @@ function ParticipantPage() {
     } else {
       console.log(`Room number set from context: ${roomNumber}`);
     }
-  }, [params, roomNumber, setRoomNumber, navigate]);
+  }, [params]);
 
   // Handle connection establishment once roomNumber is set
   useEffect(() => {
@@ -55,9 +57,9 @@ function ParticipantPage() {
         navigate("/");
       }
     } else {
-      console.error("Room number not set, cannot establish connection.");
+      console.log("Room number not set, cannot establish connection.");
     }
-  }, [roomNumber, service, navigate]);
+  }, [roomNumber]);
 
   const handleSubmitText = (text: string) => {
     try {
@@ -105,7 +107,7 @@ function ParticipantPage() {
     
     // User is the current speaker
     if (placeInLine === LinePositionValues.CURRENT_SPEAKER) {
-      return <PressToSpeak />;
+      return <PressToSpeak isMuted={isMuted} sendAudio={service.sendAudio}/>;
     }
     
     // Default: user is in line but not the current speaker

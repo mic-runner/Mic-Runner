@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "./presenterPage.css";
 import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
@@ -7,16 +7,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import PresenterService, { IPresenterView } from "../../../services/presenterService.ts";
 import { QueueParticipant } from "../../../model/queueParticipant.ts";
 import { RoomInfo } from "../../../model/roomInfo.ts";
+import { CurrentParticipant } from "../../../model/currentParticipant.ts";
 
 
 const PresenterPage = () => {
   const { state } = useLocation();
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
-  const [currentParticipant, setCurrentParticipant] = useState<QueueParticipant | null>(null);
+  const [currentParticipant, setCurrentParticipant] = useState<CurrentParticipant>(new CurrentParticipant());
   const [participants, setParticipants] = useState<QueueParticipant[]>([]);
 
   const navigate = useNavigate();
-  const initialized = useRef<boolean>(false);
 
   // CS 340 speaking to me like the green goblin mask
   const view: IPresenterView = {
@@ -28,9 +28,7 @@ const PresenterPage = () => {
 
 
   useEffect(() => {
-    if (initialized.current) return;
     initializeRoom(state);
-    initialized.current = true;
   }, []);
 
 
@@ -75,7 +73,7 @@ const PresenterPage = () => {
               onMute={service.toggleMute}
               onNext={service.nextParticipant}
               hasNextParticipant={
-                participants.length > 0 || currentParticipant !== null
+                participants.length > 0 || currentParticipant.participant !== null
               }
               onReorder={service.reorderParticipants}
               onDelete={service.deleteParticipant}

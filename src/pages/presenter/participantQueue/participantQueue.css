@@ -109,6 +109,8 @@
   transition: all 0.2s;
   font-family: var(--font-family);
   font-size: 0.9rem;
+  width: 6em; 
+  text-align: center;
 }
 
 .control-button:hover {

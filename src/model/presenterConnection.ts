@@ -1,14 +1,19 @@
-import { DataConnection } from "peerjs";
+import { DataConnection, MediaConnection } from "peerjs";
 import { Connection } from "./connection";
 import { MessageToPresenter } from "./messageToPresenter";
 import { MessageToParticipant } from "./messageToParticipant";
 
 
 export interface IPresenterService {
-  connectionOpened: (conn: DataConnection) => void;
-  messageReceived: (peerId: string, message: MessageToPresenter) => void;
-  connectionClosed: (peerId: string) => void;
-  connectionError: (peerId: string, err: any) => void;
+  onConnection: (conn: DataConnection) => void;
+  onMessage: (participantId: string, message: MessageToPresenter) => void;
+  onConnectionClose: (participantId: string) => void;
+  onConnectionError: (participantId: string, err: any) => void;
+
+  onCall: (participantId: string, call: MediaConnection) => void;
+  onCallStream: (remoteStream: MediaStream) => void;
+  onCallClose: (participantId: string) => void;
+  onCallError: (participantId: string, err: any) => void;
 }
 
 
@@ -16,6 +21,7 @@ export class PresenterConnection extends Connection {
 
   private presenterService: IPresenterService;
   private participantConnections: Map<string, DataConnection> = new Map();
+  private participantCalls: Map<string, MediaConnection> = new Map();
 
   constructor(roomId: string, presenterService: IPresenterService) {
     super(roomId);
@@ -27,12 +33,14 @@ export class PresenterConnection extends Connection {
   // SET UP EVENTS INVOLVING OUR OWN CONNECTION, SETTING UP PRESENTER
   private setUpOwnConnectionEvents() {
 
-    this.ownConn.on('open', (myPeerId) => {
-      console.log(`My peer ID is ${myPeerId}.`);
+    this.ownConn.on('open', (myparticipantId) => {
+      console.log(`My peer ID is ${myparticipantId}.`);
       this.setupParticipantConnectionEvents();
+      this.setupCallEvents();
     });
   }
 
+  // CONNECTION METHODS
   // SET UP EVENTS INVOLVING INCOMING PARTICIPANT CONNECTIONS
   private setupParticipantConnectionEvents() {
 
@@ -42,42 +50,41 @@ export class PresenterConnection extends Connection {
 
       // Connection with participant established
       participantConn.on("open", () => {
-        this.presenterService.connectionOpened(participantConn);
+        this.presenterService.onConnection(participantConn);
       });
 
       // Received data from participant
       participantConn.on("data", (body: any) => {
-        this.presenterService.messageReceived(participantConn.peer, body as MessageToPresenter);
+        this.presenterService.onMessage(participantConn.peer, body as MessageToPresenter);
       });
 
       // Participant connection closed
       participantConn.on("close", () => {
-        this.presenterService.connectionClosed(participantConn.peer);
+        this.presenterService.onConnectionClose(participantConn.peer);
       });
 
       // Error with participant connection
       participantConn.on("error", (err) => {
-        this.presenterService.connectionError(participantConn.peer, err);
+        this.presenterService.onConnectionError(participantConn.peer, err);
       });
     });
   }
-
 
   public addConnection(conn: DataConnection) {
     this.participantConnections.set(conn.peer, conn);
   }
 
-  public deleteConnection(peerId: string) {
-    const conn = this.participantConnections.get(peerId);
+  public deleteConnection(participantId: string) {
+    const conn = this.participantConnections.get(participantId);
 
     if (conn) {
       conn.close();
-      this.participantConnections.delete(peerId);
+      this.participantConnections.delete(participantId);
     }
   }
 
-  public sendMessageToParticipant(peerId: string, message: MessageToParticipant) {
-    const conn = this.participantConnections.get(peerId);
+  public sendMessageToParticipant(participantId: string, message: MessageToParticipant) {
+    const conn = this.participantConnections.get(participantId);
     if (!conn) {
       console.error("Connection not found");
       return;
@@ -85,7 +92,49 @@ export class PresenterConnection extends Connection {
 
     conn.send(message);
   }
-  
 
+
+
+  // CALL METHODS
+  // IS TRIGGERED WHEN A PARTICIPANT CALLS THE PRESENTER / TRIES TO TALK
+  private setupCallEvents() {
+    this.ownConn.on("call", (call: MediaConnection) => {
+      console.log("RECIEVED NEW CALL");
+      this.presenterService.onCall(call.peer, call);
+
+      call.on("stream", (remoteStream) => {
+        console.log("RECIEVED STREAM");
+        this.presenterService.onCallStream(remoteStream);
+      });
+      
+      call.on("close", () => {
+        this.presenterService.onCallClose(call.peer);
+      });
+      
+      call.on("error", (err) => {
+        this.presenterService.onCallError(call.peer, err);
+      });
+
+    });
+  }
+
+
+  public addCall(participantId: string, call: MediaConnection) {
+    call.answer();
+    this.participantCalls.set(participantId, call);
+  }
+
+  public deleteCall(participantId: string) {
+    const call = this.participantCalls.get(participantId);
+
+    if (call) {
+      this.closeCall(call);
+      this.participantCalls.delete(participantId);
+    }
+  }
+
+  public closeCall(call: MediaConnection) {
+    call.close();
+  }
 
 }

@@ -1,4 +1,4 @@
-import { DataConnection } from "peerjs";
+import { DataConnection, MediaConnection } from "peerjs";
 import { Connection } from "./connection";
 import { MessageToPresenter } from "./messageToPresenter.ts";
 import { MessageToParticipant } from "./messageToParticipant.ts";
@@ -11,8 +11,11 @@ export interface IParticipantService {
 export class ParticipantConnection extends Connection {
   private participantService: IParticipantService;
   private presenterConn: DataConnection = null!;
+  private call: MediaConnection | null = null;
   private roomId: string;
   private queuedMessages: MessageToPresenter[] = [];
+
+  private readonly RECONNECT_TIMEOUT = 8000;
 
   constructor(userId: string, roomId: string, participantService: IParticipantService) {
     super(userId);
@@ -29,8 +32,7 @@ export class ParticipantConnection extends Connection {
     this.ownConn.on('open', (myPeerId) => {
       console.log(`My peer ID is ${myPeerId}. Now connecting to ${this.roomId}`);
 
-      this.presenterConn = this.ownConn.connect(this.roomId);
-      this.setupPresenterConnectionEvents();
+      this.connectToPresenter();
     });
 
     // Own connection closed
@@ -42,8 +44,13 @@ export class ParticipantConnection extends Connection {
      this.ownConn.on('error', (err) => {
       console.error("Peer error:", err);
     });
-
   }
+
+  private connectToPresenter() {
+    this.presenterConn = this.ownConn.connect(this.roomId);
+    this.setupPresenterConnectionEvents();
+  }
+
 
    // SET UP EVENTS INVOLVING CONNECTION WITH PRESENTER
   private setupPresenterConnectionEvents() {
@@ -77,7 +84,8 @@ export class ParticipantConnection extends Connection {
 
   }
 
-  public sendMessage(comment: MessageToPresenter) {
+
+  public async sendMessage(comment: MessageToPresenter) {
     if (this.presenterConn && this.presenterConn.open) {
       console.log("Sending data immediately");
       this.presenterConn.send(comment);
@@ -85,9 +93,56 @@ export class ParticipantConnection extends Connection {
       console.log("Connection not yet open; queuing message");
       this.queuedMessages.push(comment);
     }
+
+    // If connecting is not working, trigger a reconnect
+    setTimeout(() => {
+      if (!this.presenterConn || !this.presenterConn.open) {
+        console.log(`Connection did not open within ${this.RECONNECT_TIMEOUT / 1000} seconds; attempting to reconnect`);
+        this.connectToPresenter();
+      }
+    }, this.RECONNECT_TIMEOUT); 
+
+  }
+
+
+  public sendAudio(stream: MediaStream | null) {
+    if (stream) {
+      // If the call doesn't exist, create one and start sending the stream
+      if (!this.call) {
+        this.call = this.ownConn.call(this.roomId, stream);
+  
+        this.call.on("close", () => {
+          console.log("Call ended.");
+          this.call = null; // Allow for a new call to be made later
+        });
+  
+        this.call.on("error", (err) => {
+          console.error("Call error:", err);
+        });
+      } else {
+        // If the call already exists, just replace the audio track
+        const senders = this.call.peerConnection.getSenders();
+        const audioSender = senders.find(sender => sender.track?.kind === 'audio');
+        if (audioSender) {
+          audioSender.replaceTrack(stream.getAudioTracks()[0]);
+        }
+      }
+    } else {
+      // If no stream is provided, simply mute the audio
+      if (this.call) {
+        const senders = this.call.peerConnection.getSenders();
+        const audioSender = senders.find(sender => sender.track?.kind === 'audio');
+        if (audioSender && audioSender.track) {
+          // Disable the track to effectively mute it without closing the connection
+          audioSender.track.enabled = false;
+        }
+      }
+    }
   }
 
   public closeConnection() {
+    this.call?.close();
+    this.call = null;
     this.presenterConn.close();
   }
 
