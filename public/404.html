@@ -5,43 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redirecting...</title>
     <script>
-      var redirectPath =
+      const currentPath =
         window.location.pathname +
         window.location.search +
         window.location.hash;
-      url = new URL(window.location.href);
 
-      params = {};
-      url.searchParams.forEach((value, key) => {
-        params[key] = value;
-      });
-      console.log(url);
-      console.log(window.location);
-      console.log(redirectPath);
-
-      obj = {
+      const redirectData = {
         path: window.location.pathname,
-        searches: params,
+        searches: Object.fromEntries(
+          new URLSearchParams(window.location.search)
+        ),
       };
 
-      buildRedirect = "?redirect=" + JSON.stringify(obj);
+      const redirectQuery =
+        "?redirect=" + encodeURIComponent(JSON.stringify(redirectData));
 
-      console.log(buildRedirect);
-
-      newURL = new URL(window.location.origin + buildRedirect);
-      console.log(newURL);
-
-      console.log(newURL.searchParams.toString());
-      console.log(decodeURIComponent(newURL.searchParams.get("redirect")));
-      decoded = JSON.parse(
-        decodeURIComponent(newURL.searchParams.get("redirect"))
-      );
-
-      console.log(decoded);
-
-      if (!window.location.href.includes("index.html")) {
-        window.location.replace("/Mic-Runner" + buildRedirect);
-      }
+      window.location.replace("/" + redirectQuery);
     </script>
   </head>
   <body>
@@ -50,10 +29,15 @@
     </p>
     <script>
       document.getElementById("redirect-link").href =
-        "/index.html" +
-        window.location.pathname +
-        window.location.search +
-        window.location.hash;
+        "/?redirect=" +
+        encodeURIComponent(
+          JSON.stringify({
+            path: window.location.pathname,
+            searches: Object.fromEntries(
+              new URLSearchParams(window.location.search)
+            ),
+          })
+        );
     </script>
   </body>
 </html>
