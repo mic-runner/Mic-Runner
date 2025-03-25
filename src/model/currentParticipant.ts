@@ -2,7 +2,7 @@ import { QueueParticipant } from "./queueParticipant";
 
 export class CurrentParticipant {
   private _participant: QueueParticipant | null = null;
-  public muted = true;
+  public muted = false;
   public daAudio: HTMLAudioElement = document.createElement("audio");
 
   // Optional copy constructor
@@ -53,6 +53,7 @@ export class CurrentParticipant {
     this.daAudio.pause();
     this.daAudio.srcObject = null;
     this.daAudio.load();
-    this.muted = true;
+    // I added this to make them not muted by default! If we don't like this we can change it later! 
+    this.muted = false;
   }
 }

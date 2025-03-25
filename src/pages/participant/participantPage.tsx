@@ -20,7 +20,7 @@ function ParticipantPage() {
   const { username, roomNumber, setRoomNumber } = userContext;
   const [placeInLine, setPlaceInLine] = useState<number>(LinePositionValues.NOT_IN_LINE);
   const [hasConnectionError, setHasConnectionError] = useState<boolean>(false);
-  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
   const navigate = useNavigate(); 
   const [params] = useSearchParams();
 
