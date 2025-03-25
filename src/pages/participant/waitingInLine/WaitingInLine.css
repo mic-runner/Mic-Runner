@@ -1,7 +1,8 @@
 .waiting-line-text-container{
     text-align: left;
     width: 80vw;
-    margin: 0 0 20vh 0;
+    margin: 0 0 20vh 10vw;
+    max-width: 80%;
 }
 
 .waiting-line-text-header{
@@ -19,3 +20,10 @@
 .next-in-line{
     color: var(--accent);
 }
+
+@media (max-width: 768px) {
+    .waiting-line-text-container {
+        margin: 0 0 20vh 0;
+        max-width: 100%;
+    }
+  }

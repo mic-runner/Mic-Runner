@@ -17,6 +17,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  touch-action: manipulation; /* Disables double-tap zoom */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight */
+  user-select: none;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none; 

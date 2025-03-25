@@ -158,6 +158,10 @@ class PresenterService {
       // Get the next participant
       const nextParticipant = this.participantQueue.shift()!;
       this.currentParticipant.setParticipant(nextParticipant);
+
+      // I added this to make them not muted by default! If we don't like this we can change it later! 
+      this.currentParticipant.muted = false;
+
       this.updateCurrentParticipantForFrontend(this.currentParticipant);
       this.notifyCurrentParticipantMuted();
       this.notifyParticipantOfPosition(this.currentParticipant.participant!.id, -1);
@@ -283,6 +287,7 @@ class PresenterService {
   // note to self: Don't use classes for React Frontend in Future, only use Interfaces. They don't play nice.
   private updateParticipantsForFrontend(participantQueue: QueueParticipant[]) {
     this.view.updateParticipants([...participantQueue]);
+
   }
 
   private updateCurrentParticipantForFrontend(currentParticipant: CurrentParticipant) {

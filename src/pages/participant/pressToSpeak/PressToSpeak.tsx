@@ -12,21 +12,27 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
   const buttonRef = useRef<HTMLDivElement>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
 
-  const handleStart = async (e: React.MouseEvent | TouchEvent) => {
-    e.preventDefault(); 
 
-    if (isMuted) {
-      return;
+  useEffect(() => {
+    if (!isSpeaking && localStream) {
+      localStream.getTracks().forEach(track => track.stop());
     }
+  }, [isSpeaking]);
 
+  const handleStart = async (e: React.MouseEvent | TouchEvent) => {
+    e.preventDefault();
+  
+    if (isMuted) return;
+  
     setIsSpeaking(true);
-
+  
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       setLocalStream(stream);
-      sendAudio(stream); // Send the local stream when speaking
+      sendAudio(stream);
     } catch (err) {
       console.error("Failed to get user media", err);
+      setIsSpeaking(false);
     }
   };
 
@@ -41,37 +47,36 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
 
     if (localStream) {
       sendAudio(null); 
-      localStream.getTracks().forEach(track => track.stop()); // Stop the stream when done speaking
+      localStream.getTracks().forEach(track => track.stop());
       setLocalStream(null);
     }
   };
 
   // For mobile users
   useEffect(() => {
+    const button = buttonRef.current;
+    if (!button) return;
+  
     const handleTouchStart = (e: TouchEvent) => {
-      if (buttonRef.current && buttonRef.current.contains(e.target as Node)) {
-        e.preventDefault();
-        handleStart(e);
-      }
+      e.preventDefault();
+      handleStart(e);
     };
-
+  
     const handleTouchEnd = (e: TouchEvent) => {
-      if (buttonRef.current && buttonRef.current.contains(e.target as Node)) {
-        e.preventDefault();
-        handleEnd(e);
-      }
+      e.preventDefault();
+      handleEnd(e);
     };
-
-    document.addEventListener("touchstart", handleTouchStart, { passive: false });
-    document.addEventListener("touchend", handleTouchEnd, { passive: false });
-    document.addEventListener("touchcancel", handleTouchEnd, { passive: false });
-
+  
+    button.addEventListener("touchstart", handleTouchStart, { passive: false });
+    button.addEventListener("touchend", handleTouchEnd, { passive: false });
+    button.addEventListener("touchcancel", handleTouchEnd, { passive: false });
+  
     return () => {
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchend", handleTouchEnd);
-      document.removeEventListener("touchcancel", handleTouchEnd);
+      button.removeEventListener("touchstart", handleTouchStart);
+      button.removeEventListener("touchend", handleTouchEnd);
+      button.removeEventListener("touchcancel", handleTouchEnd);
     };
-  }, []);
+  }, [isMuted]); 
 
   
 
