@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../../components/UserContext";
-import "./JoinRoom.css";
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../../components/UserContext';
+import './JoinRoom.css';
 
 interface JoinRoomProps {
   textboxPlaceholder: string;
@@ -10,30 +10,28 @@ interface JoinRoomProps {
 
 // Component for joining a room as a participant
 // It sets the username and room number in the UserContext on submission
-const JoinRoom: React.FC<JoinRoomProps> = (props) => {
+const JoinRoom: React.FC<JoinRoomProps> = props => {
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
 
   if (!userContext) {
-    throw new Error("JoinRoom must be used within a UserProvider");
+    throw new Error('JoinRoom must be used within a UserProvider');
   }
 
-  const { setUsername, setRoomNumber } = userContext;
-  const [room, setRoom] = useState("");
-  const [user, setUser] = useState("");
+  const { setRoomNumber } = userContext;
+  const [room, setRoom] = useState('');
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user.trim() || !room.trim()) {
-      alert("Please enter both a name and a room number.");
+    if (!room.trim()) {
+      alert('Please enter a room number.');
       return;
     }
 
-    setUsername(user);
     setRoomNumber(room);
 
     navigate(`/participant?room=${room}`, {
-      state: { username: user, roomNumber: room },
+      state: { roomNumber: room },
     });
   };
 
@@ -41,14 +39,8 @@ const JoinRoom: React.FC<JoinRoomProps> = (props) => {
     <form className="text-form" onSubmit={handleSubmitText}>
       <span className="join-text">Join a Room</span>
       <input
-        value={user}
-        onChange={(e) => setUser(e.target.value)}
-        className="text-input"
-        placeholder="What's your name?"
-      />
-      <input
         value={room}
-        onChange={(e) => setRoom(e.target.value)}
+        onChange={e => setRoom(e.target.value)}
         className="text-input"
         placeholder={props.textboxPlaceholder}
       />

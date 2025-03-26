@@ -1,39 +1,58 @@
-import { useState } from "react";
-import "./TextSubmission.css";
+import { useContext, useState } from 'react';
+import { UserContext } from '../../../components/UserContext';
+import './TextSubmission.css';
 
 interface TextSubmissionProps {
   textboxPlaceholder: string;
   buttonPlaceholder: string;
   textSubmissionHeader: string;
-  onSubmitText: (text: string) => void;
+  onSubmitText: (text: string, username: string) => void;
 }
 
 // TODO:
 // when the connection is closed, it navigates to the text submission place in line.
 
-const TextSubmission: React.FC<TextSubmissionProps> = (props) => {
-  const [text, setText] = useState("");
+const TextSubmission: React.FC<TextSubmissionProps> = props => {
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    throw new Error('JoinRoom must be used within a UserProvider');
+  }
+  const { username, setUsername } = userContext;
 
-
+  const [user, setUser] = useState(username);
+  const [text, setText] = useState('');
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
-    // I am not a big fan of this alert, but it can be uncommented if desired
-    // alert(`\nHey! you just typed: ${text}\n\nThis will eventually be sent to the presenter`);
-    setText("");
-    props.onSubmitText(text); 
+    if (!user.trim()) {
+      alert('Please enter your name');
+      return;
+    }
+    setUsername(user);
+    setText('');
+    props.onSubmitText(text, user);
   };
 
   return (
     <form className="text-form" onSubmit={handleSubmitText}>
       <h3 id="text-submission-header">{props.textSubmissionHeader}</h3>
+      {username === '' && (
+        <input
+          value={user}
+          onChange={e => setUser(e.target.value)}
+          className="text-input"
+          placeholder="What's your name?"
+        />
+      )}
       <textarea
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={e => setText(e.target.value)}
         className="text-input"
         placeholder={props.textboxPlaceholder}
       />
-      <button type="submit" className="submit-btn">{props.buttonPlaceholder}</button>
+      <button type="submit" className="submit-btn">
+        {props.buttonPlaceholder}
+      </button>
     </form>
   );
 };
