@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../../../components/UserContext';
 import './TextSubmission.css';
+import useAlert from "../../../components/Alerts/AlertHook.ts";
 
 interface TextSubmissionProps {
   textboxPlaceholder: string;
@@ -20,12 +21,13 @@ const TextSubmission: React.FC<TextSubmissionProps> = props => {
   const { username, setUsername } = userContext;
 
   const [user, setUser] = useState(username);
+  const {addAlert} = useAlert();
   const [text, setText] = useState('');
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
     if (!user.trim()) {
-      alert('Please enter your name');
+      addAlert('Please enter your name');
       return;
     }
     setUsername(user);

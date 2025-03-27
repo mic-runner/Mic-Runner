@@ -11,10 +11,9 @@ import Alerter from "./components/Alerts/Alerter.tsx";
 
 function App() {
   return (
-      <div>
-        <Alerter />
         <BrowserRouter basename={import.meta.env.VITE_APP_BASENAME}>
           <UserProvider>
+            <Alerter />
             <Routes>
               {/* Default landing page */}
               <Route path="/" element={<WelcomePage />} />
@@ -31,7 +30,6 @@ function App() {
             </Routes>
           </UserProvider>
         </BrowserRouter>
-      </div>
   );
 }
 
