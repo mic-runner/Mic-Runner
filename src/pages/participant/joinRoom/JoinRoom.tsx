@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../components/UserContext';
 import './JoinRoom.css';
+import useAlert from "../../../components/Alerts/AlertHook.ts";
 
 interface JoinRoomProps {
   textboxPlaceholder: string;
@@ -19,12 +20,13 @@ const JoinRoom: React.FC<JoinRoomProps> = props => {
   }
 
   const { setRoomNumber } = userContext;
+  const { addAlert } = useAlert();
   const [room, setRoom] = useState('');
 
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
     if (!room.trim()) {
-      alert('Please enter a room number.');
+      addAlert('Please enter a room number.');
       return;
     }
 
