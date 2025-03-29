@@ -82,6 +82,7 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
 
   return (
     <div className="press-to-speak-container">
+      <h1>{isMuted ? "Muted" : isSpeaking ? "SPEAKING" : "Hold to Speak"}</h1>
       <div
         ref={buttonRef}
         className={`press-to-speak-button ${(isMuted || !isSpeaking) ? "" : "speaking"}`}
@@ -93,13 +94,13 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
         <img src="https://mic-runner.github.io/Mic-Runner/muted.png" alt="Muted" />
         :
         isSpeaking ? 
-        <img src="https://mic-runner.github.io/Mic-Runner/mic.png" alt="Microphone" />
+        // <img src="https://mic-runner.github.io/Mic-Runner/mic.png" alt="Microphone" />
+        <img src="https://mic-runner.github.io/Mic-Runner/microphone.png" alt="Microphone" />
         :
         <img src="https://mic-runner.github.io/Mic-Runner/tap.png" alt="Tap" />
-      }
+        }
       </div>
-
-      <h1>{isMuted ? "Muted" : isSpeaking ? "SPEAKING" : "Hold to Speak"}</h1>
+      {/* <h1>{isMuted ? "Muted" : isSpeaking ? "SPEAKING" : "Hold to Speak"}</h1> */}
     </div>
   );
 };

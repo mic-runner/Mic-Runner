@@ -37,7 +37,7 @@ const TextSubmission: React.FC<TextSubmissionProps> = props => {
 
   return (
     <form className="text-form" onSubmit={handleSubmitText}>
-      <h3 id="text-submission-header">{props.textSubmissionHeader}</h3>
+      {/* <h3 id="text-submission-header">{props.textSubmissionHeader}</h3> */}
       {username === '' && (
         <input
           value={user}

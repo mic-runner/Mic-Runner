@@ -38,13 +38,13 @@ function WelcomePage() {
       <div id="participant-header">
         <h2 id="participant-title">
           <div>
-            Mic Runner
+            MIC-RUNNER
           </div>
         </h2>
       </div>
 
       <div id="participant-center">
-        <JoinRoom textboxPlaceholder="Room number?" buttonPlaceholder="Enter" />
+        <JoinRoom textboxPlaceholder="Room number?" buttonPlaceholder="Join Room" />
       </div>
 
       <div id="participant-footer">

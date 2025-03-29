@@ -46,6 +46,9 @@ body {
 
 #participant-header{
   align-self: flex-start; 
+  width: 100%;
+  background-color: var(--secondary-color);
+  padding-bottom: 1em;
 }
 
 #participant-center{
@@ -76,9 +79,13 @@ body {
 }
 
 #participant-room{
-  color: var(--primary-color);
+  color: var(--text);
   font-weight: 400;
-  margin: 0 0 5vh 10vw;
+  margin: 0 0 3vh 10vw;
+  background-color: var(--secondary-color);
+  padding: 8px;
+  font-size: medium;
+  border-radius: 5px;
 }
 
 /* end of participant and welcome page css */

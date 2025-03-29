@@ -39,7 +39,6 @@ const JoinRoom: React.FC<JoinRoomProps> = props => {
 
   return (
     <form className="text-form" onSubmit={handleSubmitText}>
-      <span className="join-text">Join a Room</span>
       <input
         value={room}
         onChange={e => setRoom(e.target.value)}

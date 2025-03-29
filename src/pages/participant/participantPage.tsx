@@ -120,14 +120,16 @@ function ParticipantPage() {
   return (
     <div id="participant-layout">
       <div id="participant-header">
-        <h1 id="participant-title">Mic Runner</h1>
+        <h1 id="participant-title">MIC RUNNER</h1>
         <h2 id="participant-username">{username}</h2>
       </div>
 
       <div id="participant-center">{renderContent()}</div>
 
       <div id="participant-footer">
-        <h3 id="participant-room">Room {roomNumber}</h3>
+        <div className='participant-room-container'>
+          <h3 id="participant-room">ROOM {roomNumber}</h3>
+        </div>
         <button onClick={handleBack} className="back-button styled-button">
           {getBackButtonText()}
         </button>

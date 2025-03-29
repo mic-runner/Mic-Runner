@@ -1,7 +1,3 @@
-.join-text {
-  color: var(--secondary-color);
-}
-
 .text-form {
   display: flex;
   flex-direction: column;
