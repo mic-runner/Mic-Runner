@@ -6,6 +6,8 @@
 }
 
 .press-to-speak-button {
+  max-width: 400px;
+  max-height: 400px;
   width: 80vw;  
   height: 80vw; 
   /* background: var(--text);  */
@@ -42,11 +44,27 @@
     width: 50%;   
     height: 50%; 
     object-fit: contain; 
-  }
+}
+
+#microphone-img {
+  width: 80%;
+  height: 80%
+}
+
+#muted-img {
+  width: 80%;
+  height: 80%;
+}
+
 
 h1 {
   font-size: 1.6em;
   font-weight: 400;
   margin-top: 20px;
+}
+
+p {
+  margin-top: 20px;
   margin-bottom: 20px;
 }
+
