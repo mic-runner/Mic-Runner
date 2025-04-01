@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../components/UserContext';
 import './JoinRoom.css';
 import useAlert from "../../../components/Alerts/AlertHook.ts";
+import Peer from "peerjs";
 
 interface JoinRoomProps {
   textboxPlaceholder: string;
@@ -23,18 +24,41 @@ const JoinRoom: React.FC<JoinRoomProps> = props => {
   const { addAlert } = useAlert();
   const [room, setRoom] = useState('');
 
+  const checkPeer = (roomId: string)=> {
+    const testPeer = new Peer(roomId);
+    testPeer.on('error', (error) => {
+      console.log(error);
+      if (error.type == 'unavailable-id') {
+        console.log("ID already exists -- Room is valid")
+        testPeer.destroy();
+        navigate(`/participant?room=${roomId}`, {
+          state: { roomNumber: roomId },
+        });
+        return
+      }
+      console.log("Something else happened -- Room is probably not valid")
+      addAlert(error.message);
+      testPeer.destroy();
+      navigate('/')
+    })
+
+    testPeer.on('open', () => {
+      console.log(`Peer did not exist ${roomId}`)
+      testPeer.destroy();
+      addAlert('Room not found')
+      navigate('/');
+    })
+  }
+
   const handleSubmitText = (e: React.FormEvent) => {
     e.preventDefault();
     if (!room.trim()) {
       addAlert('Please enter a room number.');
       return;
     }
-
     setRoomNumber(room);
 
-    navigate(`/participant?room=${room}`, {
-      state: { roomNumber: room },
-    });
+    checkPeer(room);
   };
 
   return (
