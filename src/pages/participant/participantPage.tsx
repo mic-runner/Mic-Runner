@@ -121,7 +121,6 @@ function ParticipantPage() {
     <div id="participant-layout">
       <div id="participant-header">
         <h1 id="participant-title">MIC RUNNER</h1>
-        <h2 id="participant-username">{username}</h2>
       </div>
 
       <div id="participant-center">{renderContent()}</div>

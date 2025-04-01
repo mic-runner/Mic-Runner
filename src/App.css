@@ -67,16 +67,10 @@ body {
 
 #participant-title{
   font-weight: 400;
-  margin: 10vh 0 0 10vw;
+  margin: 5vh 0 0 10vw;
   font-size: 2em;
 }
 
-#participant-username{
-  color: var(--secondary-color);
-  font-weight: 300;
-  margin: 0 0 0 10vw;
-  font-size: 1.3em;
-}
 
 #participant-room{
   color: var(--text);
