@@ -3,7 +3,6 @@ import { Connection } from "./connection";
 import { MessageToPresenter } from "./messageToPresenter";
 import { MessageToParticipant } from "./messageToParticipant";
 
-
 export interface IPresenterService {
   onConnection: (conn: DataConnection) => void;
   onMessage: (participantId: string, message: MessageToPresenter) => void;
@@ -16,9 +15,7 @@ export interface IPresenterService {
   onCallError: (participantId: string, err: any) => void;
 }
 
-
 export class PresenterConnection extends Connection {
-
   private presenterService: IPresenterService;
   private participantConnections: Map<string, DataConnection> = new Map();
   private participantCalls: Map<string, MediaConnection> = new Map();
@@ -32,8 +29,7 @@ export class PresenterConnection extends Connection {
 
   // SET UP EVENTS INVOLVING OUR OWN CONNECTION, SETTING UP PRESENTER
   private setUpOwnConnectionEvents() {
-
-    this.ownConn.on('open', (myparticipantId) => {
+    this.ownConn.on("open", (myparticipantId) => {
       console.log(`My peer ID is ${myparticipantId}.`);
       this.setupParticipantConnectionEvents();
       this.setupCallEvents();
@@ -43,7 +39,6 @@ export class PresenterConnection extends Connection {
   // CONNECTION METHODS
   // SET UP EVENTS INVOLVING INCOMING PARTICIPANT CONNECTIONS
   private setupParticipantConnectionEvents() {
-
     // When a participant connects
     this.ownConn.on("connection", (participantConn) => {
       console.log("START OF CONNECTION", participantConn.peer);
@@ -55,7 +50,10 @@ export class PresenterConnection extends Connection {
 
       // Received data from participant
       participantConn.on("data", (body: any) => {
-        this.presenterService.onMessage(participantConn.peer, body as MessageToPresenter);
+        this.presenterService.onMessage(
+          participantConn.peer,
+          body as MessageToPresenter
+        );
       });
 
       // Participant connection closed
@@ -83,7 +81,10 @@ export class PresenterConnection extends Connection {
     }
   }
 
-  public sendMessageToParticipant(participantId: string, message: MessageToParticipant) {
+  public sendMessageToParticipant(
+    participantId: string,
+    message: MessageToParticipant
+  ) {
     const conn = this.participantConnections.get(participantId);
     if (!conn) {
       console.error("Connection not found");
@@ -92,8 +93,6 @@ export class PresenterConnection extends Connection {
 
     conn.send(message);
   }
-
-
 
   // CALL METHODS
   // IS TRIGGERED WHEN A PARTICIPANT CALLS THE PRESENTER / TRIES TO TALK
@@ -105,19 +104,18 @@ export class PresenterConnection extends Connection {
       call.on("stream", (remoteStream) => {
         console.log("RECIEVED STREAM");
         this.presenterService.onCallStream(remoteStream);
+        this.applyBandpassFilter(remoteStream);
       });
-      
+
       call.on("close", () => {
         this.presenterService.onCallClose(call.peer);
       });
-      
+
       call.on("error", (err) => {
         this.presenterService.onCallError(call.peer, err);
       });
-
     });
   }
-
 
   public addCall(participantId: string, call: MediaConnection) {
     call.answer();
@@ -137,4 +135,20 @@ export class PresenterConnection extends Connection {
     call.close();
   }
 
+  private applyBandpassFilter(remoteStream: MediaStream) {
+    const audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(remoteStream);
+
+    // Create a bandpass filter
+    const filter = audioContext.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.value = 500; // Center frequency (e.g., 1kHz)
+    filter.Q.value = 4; // Quality factor (adjust for width of the band)
+
+    source.connect(filter);
+
+    // Connect to the output (speakers)
+    const destination = audioContext.destination;
+    filter.connect(destination);
+  }
 }
