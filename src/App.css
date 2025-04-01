@@ -44,6 +44,13 @@ body {
   max-width: 800px;
 }
 
+/* This is a fix for mobile devices that have a dynamic address bar that changes the viewport height */
+@supports (height: 100dvh) {
+  #participant-layout {
+    height: 100dvh;
+  }
+}
+
 #participant-header{
   align-self: flex-start; 
   width: 100%;
