@@ -41,7 +41,7 @@ const PresenterPage = () => {
     // Keeping the roomInfo object for centralization of updates
     const room: RoomInfo = {
         roomNumber: state.room,
-        joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}/participant?room=${state.room}`,
+        joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}participant?room=${state.room}`,
     };
     setRoomInfo(room);
 
