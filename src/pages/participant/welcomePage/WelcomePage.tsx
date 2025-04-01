@@ -38,7 +38,7 @@ function WelcomePage() {
       <div id="participant-header">
         <h2 id="participant-title">
           <div>
-            MIC-RUNNER
+            MIC RUNNER
           </div>
         </h2>
       </div>
