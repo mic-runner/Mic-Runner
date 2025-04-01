@@ -16,7 +16,7 @@ function ParticipantPage() {
     throw new Error('ParticipantPage must be used within a UserProvider');
   }
 
-  const { roomNumber, setRoomNumber } = userContext;
+  const {username, roomNumber, setRoomNumber } = userContext;
   const [placeInLine, setPlaceInLine] = useState<number>(LinePositionValues.NOT_IN_LINE);
   const [hasConnectionError, setHasConnectionError] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
