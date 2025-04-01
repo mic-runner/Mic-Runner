@@ -13,7 +13,7 @@ const QRCodeSection = ({ joinUrl }: QRCodeSectionProps) => {
   return (
     <div className="top-box-inner">
       <div className="join-now">
-        Join to speak!
+        <h2>Join to speak!</h2>
       </div>
       <div className="join-box">
         <div className="qr-code">
@@ -28,7 +28,7 @@ const QRCodeSection = ({ joinUrl }: QRCodeSectionProps) => {
         </div>
       </div>
       <div className="link-box">
-        {joinUrl ? joinUrl : ""}
+        <p>{joinUrl ? joinUrl : ""}</p>
       </div>
     </div>
   );

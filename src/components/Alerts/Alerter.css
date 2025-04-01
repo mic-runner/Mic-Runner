@@ -3,9 +3,12 @@
     box-sizing: border-box;
     position: fixed;
     z-index: 999999;
-    top: 12px;
-    right: 12px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     flex-shrink: 0;
+    background-color: var(--secondary-color);
+
 }
 
 .alert {
@@ -16,6 +19,7 @@
     flex-direction: column;
     gap: 5px;
     align-items: center;
+    color: var(--primary-color);
 }
 
 .alert-btn {

@@ -42,7 +42,7 @@
 }
 
 .join-now {
-  font-size: 3rem;
+  /* font-size: 3rem; */
   text-align: center;
   line-height: 1.2;
   color: var(--text);
@@ -56,7 +56,6 @@
   width: 100%;
   text-align: center;
   font-size: 1.2rem;
-  margin-top: 1em;
   word-break: break-all;
   flex: 0 0 auto;
   padding: 0 1em;

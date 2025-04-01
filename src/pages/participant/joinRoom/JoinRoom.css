@@ -18,6 +18,7 @@
   transition: border 0.3s ease;
   resize: vertical;
   min-height: 4vh;
+  text-align: center;
 }
 
 .text-input:focus {

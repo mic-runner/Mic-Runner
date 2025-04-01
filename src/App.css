@@ -1,6 +1,4 @@
 #root {
-  font-family: var(--font-family);
-  max-width: 1280px;
   width: 100%;
   min-height: 100vh;
   margin: auto;
@@ -33,6 +31,15 @@ body {
   transition: background 0.3s ease;
 }
 
+h2, h3, h4, p, .text-input, div{
+  font-family: var(--font-family);
+}
+
+h1 {
+  font-family: var(--font-family-2);
+  color: white;
+}
+
 /* This is css for the participant and welcome page. it seems like they overlap a little */
 
 #participant-layout{
@@ -40,8 +47,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
-  width: 100%;
-  max-width: 800px;
+  width: 100vw;
 }
 
 #participant-header{
@@ -49,6 +55,10 @@ body {
   width: 100%;
   background-color: var(--secondary-color);
   padding-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em 0;
 }
 
 #participant-center{
@@ -62,26 +72,23 @@ body {
 #participant-footer{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+  padding-bottom: 10px;
 }
 
 #participant-title{
   font-weight: 400;
-  margin: 10vh 0 0 10vw;
-  font-size: 2em;
 }
 
 #participant-username{
-  color: var(--secondary-color);
-  font-weight: 300;
-  margin: 0 0 0 10vw;
-  font-size: 1.3em;
+  color: var(--text);
+  font-weight: 600;
+  margin-top: 1em;
 }
 
 #participant-room{
   color: var(--text);
   font-weight: 400;
-  margin: 0 0 3vh 10vw;
   background-color: var(--secondary-color);
   padding: 8px;
   font-size: medium;

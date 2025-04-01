@@ -122,7 +122,7 @@ const ParticipantList = ({
         {/* Next Up Label */}
         {participants.length > 0 && (
           <div className="next-up-label">
-            NEXT UP
+            <h3>NEXT UP</h3>
           </div>
         )}
         
@@ -139,9 +139,9 @@ const ParticipantList = ({
                 onDragEnd={handleDragEnd}
               >
                 <div className="participant-item-content">
-                  <div className="participant-name">{participant.name}</div>
+                  <div className="participant-name"><p>{participant.name}</p></div>
                   {participant.comment && (
-                    <div className="participant-comment">{participant.comment}</div>
+                    <div className="participant-comment"><p>{participant.comment}</p></div>
                   )}
                 </div>
                 <button 

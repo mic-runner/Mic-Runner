@@ -1,8 +1,7 @@
 .waiting-line-text-container{
     text-align: left;
-    width: 80vw;
-    margin: 0 0 20vh 10vw;
     max-width: 80%;
+    margin-bottom: 4em;
 }
 
 .waiting-line-text-header{

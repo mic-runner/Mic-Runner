@@ -82,14 +82,13 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
 
   return (
     <div className="press-to-speak-container">
-      <p>{isMuted ? "Presenter has muted you for now" : "Talk into your phone's microphone"}</p>
       <div
         ref={buttonRef}
         className={`press-to-speak-button ${(isMuted || !isSpeaking) ? "" : "speaking"}`}
         onMouseDown={handleStart}  // This just helps on desktop
         onMouseUp={handleEnd}
         onMouseLeave={handleEnd}
-      >
+        >
         {isMuted ? 
         <img id="muted-img" src="https://mic-runner.github.io/Mic-Runner/muted.png" alt="Muted" />
         :
@@ -98,9 +97,12 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
         <img id="microphone-img" src="https://mic-runner.github.io/Mic-Runner/microphone-img.png" alt="Microphone" />
         :
         <img src="https://mic-runner.github.io/Mic-Runner/tap.png" alt="Tap" />
-        }
+      }
       </div>
-      <h1>{isMuted ? "Muted by Presenter" : isSpeaking ? "NOW SPEAKING" : "Hold to Speak"}</h1>
+      <div className="speaking-instructions">
+        <h1>{isMuted ? "Muted by Presenter" : isSpeaking ? "NOW SPEAKING" : "Hold to Speak"}</h1>
+        <p>{isMuted ? "Presenter has muted you for now" : "Talk into your phone's microphone"}</p>
+      </div>
       {/* <p>{isSpeaking ? "Talk into your phone's microphone" : ""}</p> */}
       
     </div>

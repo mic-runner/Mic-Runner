@@ -4,7 +4,6 @@ import { UserContext } from '../../components/UserContext.tsx';
 import TextSubmission from './textSubmission/TextSubmission.tsx';
 import PressToSpeak from './pressToSpeak/PressToSpeak.tsx';
 import WaitingInLine from './waitingInLine/WaitingInLine.tsx';
-import './participantPage.css';
 import Loading from '../miscPages/Loading.tsx';
 import ConnectionErrorPage from '../miscPages/ConnectionError.tsx';
 import ParticipantService, { IParticipantView } from '../../services/participantService.ts';
@@ -90,7 +89,7 @@ function ParticipantPage() {
     if (placeInLine === LinePositionValues.NOT_IN_LINE) {
       return (
         <TextSubmission
-          textboxPlaceholder="I have a question about..."
+          textboxPlaceholder="(Optional) I have a question about..."
           buttonPlaceholder="Get in line"
           textSubmissionHeader="Join the Queue"
           onSubmitText={handleSubmitText}
@@ -120,16 +119,19 @@ function ParticipantPage() {
   return (
     <div id="participant-layout">
       <div id="participant-header">
-        <h1 id="participant-title">MIC RUNNER</h1>
-        <h2 id="participant-username">{username}</h2>
+        <h1 id="participant-title">MIC-RUNNER</h1>
+        <h3 id="participant-username">{username}</h3>
+        <div className='participant-room-container'>
+          <h3 id="participant-room">ROOM {roomNumber}</h3>
+        </div>
       </div>
 
       <div id="participant-center">{renderContent()}</div>
 
       <div id="participant-footer">
-        <div className='participant-room-container'>
+        {/* <div className='participant-room-container'>
           <h3 id="participant-room">ROOM {roomNumber}</h3>
-        </div>
+        </div> */}
         <button onClick={handleBack} className="back-button styled-button">
           {getBackButtonText()}
         </button>
