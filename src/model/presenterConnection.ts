@@ -103,8 +103,8 @@ export class PresenterConnection extends Connection {
 
       call.on("stream", (remoteStream) => {
         console.log("RECIEVED STREAM");
-        this.presenterService.onCallStream(remoteStream);
-        this.applyBandpassFilter(remoteStream);
+        const filteredStream = this.applyBandpassFilter(remoteStream);
+        this.presenterService.onCallStream(filteredStream);
       });
 
       call.on("close", () => {
@@ -147,8 +147,9 @@ export class PresenterConnection extends Connection {
 
     source.connect(filter);
 
-    // Connect to the output (speakers)
-    const destination = audioContext.destination;
-    filter.connect(destination);
+    const streamDestination = audioContext.createMediaStreamDestination();
+    filter.connect(streamDestination);
+
+    return streamDestination.stream;
   }
 }
