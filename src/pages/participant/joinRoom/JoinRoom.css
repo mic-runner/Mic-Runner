@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 80vw;
+  width: 80dvw;
   max-width: 350px;
   border-radius: 10px;
   background-color: black;
-  max-height: 50vh;
+  max-height: 50dvh;
 }
 
 .text-input {
@@ -17,7 +17,7 @@
   outline: none;
   transition: border 0.3s ease;
   resize: vertical;
-  min-height: 4vh;
+  min-height: 4dvh;
   text-align: center;
 }
 

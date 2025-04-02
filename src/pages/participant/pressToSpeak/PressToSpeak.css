@@ -8,9 +8,10 @@
 .press-to-speak-button {
   max-width: 400px;
   max-height: 400px;
-  width: 80vw;  
-  height: 80vw; 
-  margin: 2em 0;
+  width: min(52dvh, 89dvw) !important;
+  height: min(52dvh, 89dvw) !important;
+  margin-top: 1.5em;
+  margin-bottom: 1em;
   background: linear-gradient(to bottom, var(--text), #8C8484);
   border-radius: 50%; 
   cursor: pointer;
@@ -28,12 +29,6 @@
   -ms-user-select: none;
 }
 
-@media (min-width: 768px) {
-    .press-to-speak-button {
-      width: 60vh; 
-      height: 60vh; 
-    }
-  }
 
 .press-to-speak-button.speaking {
     background: linear-gradient(to bottom, var(--secondary-color), #2B0505);
@@ -58,7 +53,7 @@
 
 .speaking-instructions {
   text-align: center;
-  margin-bottom: 4em;
+  margin-bottom: 2em;
 }
 
 

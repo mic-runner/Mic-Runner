@@ -1,6 +1,6 @@
 #root {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: auto;
   display: flex;
   justify-content: center;
@@ -13,8 +13,8 @@ body {
   padding: 0;
   color: var(--text);
   background-color: var(--background);
-  min-height: 100vh; 
-  width: 100vw;
+  min-height: 100dvh; 
+  width: 100dvw;
 }
 
 .styled-button{
@@ -46,19 +46,18 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
-  width: 100vw;
+  height: 100dvh;
+  width: 100dvw;
 }
 
 #participant-header{
   align-self: flex-start; 
   width: 100%;
   background-color: var(--secondary-color);
-  padding-bottom: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1em 0;
+  padding: 1em;
 }
 
 #participant-center{
@@ -83,14 +82,14 @@ h1 {
 #participant-username{
   color: var(--text);
   font-weight: 600;
-  margin-top: 1em;
+  margin-top: 0.25em;
 }
 
 #participant-room{
   color: var(--text);
   font-weight: 400;
   background-color: var(--secondary-color);
-  padding: 8px;
+  padding-top: 4px;
   font-size: medium;
   border-radius: 5px;
 }

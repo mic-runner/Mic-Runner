@@ -2,12 +2,12 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 65vw;
+    width: 65dvw;
     padding: 10px;
     border-radius: 10px;
     background-color: var(--text);
-    max-height: 50vh;
-    margin: 0 0 10vh 0;
+    max-height: 50dvh;
+    margin: 0 0 10dvh 0;
   }
 
   #text-submission-header{
@@ -24,7 +24,7 @@
     outline: none;
     transition: border 0.3s ease;
     resize: vertical;  
-    min-height: 10vh;   
+    min-height: 10dvh;   
   }
   
   .text-input:focus {
