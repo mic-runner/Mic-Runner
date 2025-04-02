@@ -44,6 +44,7 @@ export class CurrentParticipant {
     if (this.muted) {
       this.daAudio.pause();
     } else {
+      console.log("AUDIO SHOULD BE PLAYING");
       this.daAudio.play();
     }
   }
