@@ -93,7 +93,7 @@ const ParticipantList = ({
       </div>
       
       {/* Current Speaker - Fixed outside of the scrollable area */}
-      {currentParticipant.participant && (
+      {currentParticipant.participant ? (
         <div className="current-speaker-wrapper">
           <div className="participant-item active">
             <div className="participant-status">
@@ -113,6 +113,22 @@ const ParticipantList = ({
             {currentParticipant.participant.comment && (
               <div className="participant-comment">{currentParticipant.participant.comment}</div>
             )}
+          </div>
+        </div>
+      ) : (
+        <div className="current-speaker-wrapper">
+          <div className="participant-item">
+            <div className="participant-status">
+              <div className="mic-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 1C10.3431 1 9 2.34315 9 4V12C9 13.6569 10.3431 15 12 15C13.6569 15 15 13.6569 15 12V4C15 2.34315 13.6569 1 12 1Z" fill="#777777"/>
+                  <path d="M7 12C7 12 7 14 12 14C17 14 17 12 17 12" stroke="#777777" strokeWidth="2"/>
+                  <path d="M12 17V20" stroke="#777777" strokeWidth="2"/>
+                  <path d="M8 20H16" stroke="#777777" strokeWidth="2"/>
+                </svg>
+              </div>
+            </div>
+            <div className="empty-name">No participant speaking</div>
           </div>
         </div>
       )}
