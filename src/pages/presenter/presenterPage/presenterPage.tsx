@@ -53,8 +53,7 @@ const PresenterPage = () => {
     <div className="presenter-layout">
       <div className="inner-presenter-layout">
         <div className="presenter-header">
-          <h1 className="presenter-title">Mic Runner</h1>
-          <p className="room-number">Room {roomInfo?.roomNumber}</p>
+          <h1 className="presenter-title"><span style={{ color: "var(--secondary-color)" }}>Mic-Runner:</span> Room {roomInfo?.roomNumber}</h1>
         </div>
 
         <div className="presenter-content">
