@@ -11,7 +11,7 @@ const QRCodeSection = ({ joinUrl }: QRCodeSectionProps) => {
   const [qrSize, setQrSize] = useState(0);
   
   const calculateQrSize = () => {
-    const newSize = Math.min(window.innerHeight * 0.52, window.innerWidth * 0.68);
+    const newSize = Math.min(window.innerHeight * 0.52, window.innerWidth * 0.67);
     setQrSize(newSize);
   };
   

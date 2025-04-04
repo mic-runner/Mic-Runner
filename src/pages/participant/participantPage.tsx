@@ -135,7 +135,10 @@ function ParticipantPage() {
       </div>
 
       <div id="participant-footer">
-        <h3 id="participant-room">Room {roomNumber}</h3>
+        
+        {/* SHOWING THE ROOM NUMBER IS A GOOD IDEAD, BUT RIGHT NOW IT IS NOT VERY BEAUTIFUL, BEFORE IT IS UNCOMMENTED IT SHOULD BE TIDIED UP A LITTLE
+        <h3 id="participant-room">Room {roomNumber}</h3> */}
+
         <button onClick={handleBack} className="back-button styled-button">
           {getBackButtonText()}
         </button>

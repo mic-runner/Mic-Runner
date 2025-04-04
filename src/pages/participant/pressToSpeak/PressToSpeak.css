@@ -23,8 +23,6 @@
   touch-action: manipulation; /* Disables double-tap zoom */
   -webkit-tap-highlight-color: transparent; /* Removes tap highlight */
   user-select: none;
-  touch-action: none;
-  user-select: none;
   -webkit-user-select: none; 
   -ms-user-select: none;
 }
@@ -32,7 +30,7 @@
 
 .press-to-speak-button.speaking {
     background: linear-gradient(to bottom, var(--secondary-color), #2B0505);
-  transform: scale(0.85); 
+    transform: scale(0.85); 
 }
 
 .press-to-speak-button img {

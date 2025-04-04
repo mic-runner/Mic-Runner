@@ -159,8 +159,6 @@ class PresenterService {
       const nextParticipant = this.participantQueue.shift()!;
       this.currentParticipant.setParticipant(nextParticipant);
 
-      //
-
       this.updateCurrentParticipantForFrontend(this.currentParticipant);
       this.notifyCurrentParticipantMuted();
       this.notifyParticipantOfPosition(this.currentParticipant.participant!.id, -1);
