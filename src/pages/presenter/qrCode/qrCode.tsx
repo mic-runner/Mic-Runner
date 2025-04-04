@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./qrCode.css";
 import QRCode from "react-qr-code";
 
@@ -7,9 +8,22 @@ interface QRCodeSectionProps {
 
 const QRCodeSection = ({ joinUrl }: QRCodeSectionProps) => {
 
-  // Calculate QR code size as 47% of viewport height, max 350px
-  const qrSize = Math.min(350, window.innerHeight * 0.47);
+  const [qrSize, setQrSize] = useState(0);
   
+  const calculateQrSize = () => {
+    const newSize = Math.min(window.innerHeight * 0.52, window.innerWidth * 0.68);
+    setQrSize(newSize);
+  };
+  
+  useEffect(() => {
+    calculateQrSize();
+    window.addEventListener('resize', calculateQrSize);
+    return () => {
+      window.removeEventListener('resize', calculateQrSize);
+    };
+  }, []);
+
+
   return (
     <div className="top-box-inner">
       <div className="join-now">
