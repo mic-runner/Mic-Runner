@@ -14,6 +14,9 @@ export class ParticipantConnection extends Connection {
   private roomId: string;
   private queuedMessages: MessageToPresenter[] = [];
 
+  private audioContext: AudioContext;
+  private gainNode: GainNode;
+
   private readonly RECONNECT_TIMEOUT = 8000;
 
   constructor(
@@ -25,8 +28,14 @@ export class ParticipantConnection extends Connection {
     this.roomId = roomId;
     this.participantService = participantService;
 
+    // Set up initial audio stuff, it is kindaish expensive to make it every time so we do it once here
+    this.audioContext = new AudioContext();
+    this.gainNode = this.audioContext.createGain();
+    this.gainNode.gain.value = 0.01; 
+
     this.setUpOwnConnectionEvents();
   }
+
 
   // SET UP EVENTS INVOLVING OUR OWN CONNECTION, SETTING UP PARTICIPANT
   private setUpOwnConnectionEvents() {
@@ -109,14 +118,12 @@ export class ParticipantConnection extends Connection {
 
   public sendAudio(stream: MediaStream | null) {
     if (stream) {
-      const audioContext = new AudioContext();
-      const gainNode = audioContext.createGain();
-      gainNode.gain.value = 0.01;
-      const source = audioContext.createMediaStreamSource(stream);
-      source.connect(gainNode);
 
-      const destination = audioContext.createMediaStreamDestination();
-      gainNode.connect(destination);
+      const source = this.audioContext.createMediaStreamSource(stream);
+      source.connect(this.gainNode);
+
+      const destination = this.audioContext.createMediaStreamDestination();
+      this.gainNode.connect(destination);
 
       const processedStream = destination.stream;
       if (!this.call) {
