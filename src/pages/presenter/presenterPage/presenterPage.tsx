@@ -4,16 +4,18 @@ import QRCodeSection from "../qrCode/qrCode";
 import ParticipantList from "../participantQueue/participantQueue";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import PresenterService, { IPresenterView } from "../../../services/presenterService.ts";
+import PresenterService, {
+  IPresenterView,
+} from "../../../services/presenterService.ts";
 import { QueueParticipant } from "../../../model/queueParticipant.ts";
 import { RoomInfo } from "../../../model/roomInfo.ts";
 import { CurrentParticipant } from "../../../model/currentParticipant.ts";
 
-
 const PresenterPage = () => {
   const { state } = useLocation();
   const [roomInfo, setRoomInfo] = useState<RoomInfo | null>(null);
-  const [currentParticipant, setCurrentParticipant] = useState<CurrentParticipant>(new CurrentParticipant());
+  const [currentParticipant, setCurrentParticipant] =
+    useState<CurrentParticipant>(new CurrentParticipant());
   const [participants, setParticipants] = useState<QueueParticipant[]>([]);
 
   const navigate = useNavigate();
@@ -26,11 +28,9 @@ const PresenterPage = () => {
 
   const [service] = useState<PresenterService>(new PresenterService(view));
 
-
   useEffect(() => {
     initializeRoom(state);
   }, []);
-
 
   // For some reason state has to be type any?
   const initializeRoom = (state: any) => {
@@ -40,14 +40,15 @@ const PresenterPage = () => {
     }
     // Keeping the roomInfo object for centralization of updates
     const room: RoomInfo = {
-        roomNumber: state.room,
-        joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}participant?room=${state.room}`,
+      roomNumber: state.room,
+      joinUrl: `${
+        window.location.origin + import.meta.env.VITE_APP_BASENAME
+      }participant?room=${state.room}`,
     };
     setRoomInfo(room);
 
     service.connectPresenter(room.roomNumber);
-  }
-
+  };
 
   return (
     <div className="presenter-layout">
@@ -67,13 +68,14 @@ const PresenterPage = () => {
           </div>
 
           <div className="participant-column">
-          <ParticipantList
+            <ParticipantList
               participants={participants}
               currentParticipant={currentParticipant}
               onMute={service.toggleMute}
               onNext={service.nextParticipant}
               hasNextParticipant={
-                participants.length > 0 || currentParticipant.participant !== null
+                participants.length > 0 ||
+                currentParticipant.participant !== null
               }
               onReorder={service.reorderParticipants}
               onDelete={service.deleteParticipant}
