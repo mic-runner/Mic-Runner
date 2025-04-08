@@ -41,11 +41,7 @@ export class CurrentParticipant {
   }
 
   private playAudio() {
-    if (this.muted) {
-      this.daAudio.pause();
-    } else {
-      this.daAudio.play();
-    }
+    this.daAudio.muted = this.muted;
   }
 
 
