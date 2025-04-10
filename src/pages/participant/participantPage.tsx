@@ -60,6 +60,14 @@ function ParticipantPage() {
     }
   }, [roomNumber]);
 
+  useEffect(() => {
+    window.addEventListener('beforeunload', function(event) {
+      alert("before unload called!");
+        service.disconnectFromPresenter()
+        alert("this should ahve a stop");
+  });
+  }, [])
+
   const handleSubmitText = (text: string) => {
     try {
       setPlaceInLine(LinePositionValues.LOADING);
@@ -72,13 +80,10 @@ function ParticipantPage() {
 
   const handleBack = () => {
     if (placeInLine === LinePositionValues.NOT_IN_LINE) {
-
-      console.warn("\n\n\nDISCONNECTED FROM PRESENTER CALLED!!!\n\n")
       service.disconnectFromPresenter();
       navigate("/");
     } 
     else {
-      console.warn("THIS WAS CALLED WHOOP WHOOP")
       service.removeFromQueue();
       setPlaceInLine(LinePositionValues.NOT_IN_LINE);
     }

@@ -2,13 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import "./PressToSpeak.css";
 
 
-const IMAGE_URLS = {
-  muted: "https://mic-runner.github.io/Mic-Runner/muted.png",
-  speaking: "https://mic-runner.github.io/Mic-Runner/microphone-img.png",
-  tap: "https://mic-runner.github.io/Mic-Runner/tap.png",
-};
-
-
 interface PressToSpeakProps {
   isMuted: boolean;
   sendAudio: (stream: MediaStream | null) => void;
@@ -20,28 +13,26 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
 
 
-  // It was taking a long time to load the Mic for some reason. Pre-loading fixes that.
-  useEffect(() => {
-    Object.values(IMAGE_URLS).forEach(url => { new Image().src = url; });
-  }, []);
-
-
   useEffect(() => {
     if (!isSpeaking && localStream) {
-      localStream.getTracks().forEach(track => track.stop());
+      localStream.getTracks().forEach(track => track.enabled = false);
     }
   }, [isSpeaking]);
 
   const handleStart = async (e: React.MouseEvent | TouchEvent) => {
     e.preventDefault();
+  
     if (isMuted) return;
   
     setIsSpeaking(true);
   
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      setLocalStream(stream);
-      sendAudio(stream);
+      if(!localStream){
+
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        setLocalStream(stream);
+        sendAudio(stream);
+      }
     } catch (err) {
       console.error("Failed to get user media", err);
       setIsSpeaking(false);
@@ -59,7 +50,7 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
 
     if (localStream) {
       sendAudio(null); 
-      localStream.getTracks().forEach(track => track.stop());
+      localStream.getTracks().forEach(track => track.enabled = false);
       setLocalStream(null);
     }
   };
@@ -102,12 +93,13 @@ const PressToSpeak = ({ isMuted, sendAudio }: PressToSpeakProps) => {
         onMouseLeave={handleEnd}
         >
         {isMuted ? 
-        <img id="muted-img" src={IMAGE_URLS.muted} alt="Muted" />
+        <img id="muted-img" src="https://mic-runner.github.io/Mic-Runner/muted.png" alt="Muted" />
         :
         isSpeaking ? 
-        <img id="microphone-img" src={IMAGE_URLS.speaking} alt="Microphone" />
+        // <img src="https://mic-runner.github.io/Mic-Runner/mic.png" alt="Microphone" />
+        <img id="microphone-img" src="https://mic-runner.github.io/Mic-Runner/microphone-img.png" alt="Microphone" />
         :
-        <img src={IMAGE_URLS.tap} alt="Tap" />
+        <img src="https://mic-runner.github.io/Mic-Runner/tap.png" alt="Tap" />
       }
       </div>
       <div className="speaking-instructions">
