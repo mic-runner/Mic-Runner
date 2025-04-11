@@ -41,6 +41,7 @@ const PresenterPage = () => {
     // Keeping the roomInfo object for centralization of updates
     const room: RoomInfo = {
         roomNumber: state.room,
+        roomName: state.roomName,
         joinUrl: `${window.location.origin + import.meta.env.VITE_APP_BASENAME}participant?room=${state.room}`,
     };
     setRoomInfo(room);
@@ -53,13 +54,13 @@ const PresenterPage = () => {
     <div className="presenter-layout">
       <div className="inner-presenter-layout">
         <div className="presenter-header">
-          <h1 className="presenter-title"><span style={{ color: "var(--secondary-color)" }}>Mic-Runner:</span> Room {roomInfo?.roomNumber}</h1>
+          <h1 className="presenter-title"><span style={{ color: "var(--secondary-color)" }}>Mic-Runner:</span> {roomInfo?.roomName || `Room ${roomInfo?.roomNumber}`}</h1>
         </div>
 
         <div className="presenter-content">
           <div className="qr-column">
             {roomInfo ? (
-              <QRCodeSection joinUrl={(roomInfo as RoomInfo).joinUrl} />
+              <QRCodeSection joinUrl={(roomInfo as RoomInfo).joinUrl} code={roomInfo.roomNumber}/>
             ) : (
               <div className="qr-placeholder">QR CODE PLACEHOLDER</div>
             )}

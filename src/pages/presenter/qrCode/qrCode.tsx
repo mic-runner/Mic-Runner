@@ -4,9 +4,10 @@ import QRCode from "react-qr-code";
 
 interface QRCodeSectionProps {
   joinUrl: string | undefined;
+  code: string
 }
 
-const QRCodeSection = ({ joinUrl }: QRCodeSectionProps) => {
+const QRCodeSection = ({ joinUrl, code }: QRCodeSectionProps) => {
 
   const [qrSize, setQrSize] = useState(0);
   
@@ -27,7 +28,7 @@ const QRCodeSection = ({ joinUrl }: QRCodeSectionProps) => {
   return (
     <div className="top-box-inner">
       <div className="join-now">
-        <h2>Join to speak!</h2>
+        <h2>Scan or use code <text id="join-code">{code}</text> to speak!</h2>
       </div>
       <div className="join-box">
         <div className="qr-code">

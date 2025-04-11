@@ -1,3 +1,15 @@
 .host-room-button:hover {
   background-color: var(--secondary-color);
 }
+
+.text-input {
+  color: var(--primary-color);
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition: border 0.3s ease;
+  resize: vertical;
+  min-height: 4dvh;
+  text-align: center;
+}

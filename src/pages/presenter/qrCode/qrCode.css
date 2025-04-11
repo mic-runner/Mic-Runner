@@ -51,6 +51,10 @@
   flex: 0 0 auto;
 }
 
+#join-code {
+  color: var(--primary-color)
+}
+
 .link-box {
   color: var(--primary-color);
   width: 100%;
