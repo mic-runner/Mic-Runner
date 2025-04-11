@@ -60,7 +60,7 @@ function ParticipantPage() {
     }
   }, [roomNumber]);
 
-  const handleSubmitText = (text: string) => {
+  const handleSubmitText = (text: string, username: string) => {
     try {
       setPlaceInLine(LinePositionValues.LOADING);
       service.sendComment(text, username);

@@ -25,6 +25,9 @@ const JoinRoom: React.FC<JoinRoomProps> = props => {
   const [room, setRoom] = useState('');
 
   const checkPeer = (roomId: string)=> {
+    // navigate(`/participant?room=${roomId}`, {
+    //   state: { roomNumber: roomId },
+    // });
     const testPeer = new Peer(roomId);
     testPeer.on('error', (error) => {
       console.log(error);
