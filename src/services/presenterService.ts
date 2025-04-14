@@ -72,6 +72,7 @@ class PresenterService {
 
   public handleMessage(participantId: string, message: MessageToPresenter) {
     console.log(`Received from participant: ${participantId}, message: ${message}`);
+    console.log("Message: ", message);
 
     if (message.removeFromQueue) {
       this.handleConnectionClose(participantId);
